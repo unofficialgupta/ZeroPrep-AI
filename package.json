@@ -1,23 +1,33 @@
 {
-  "name": "temp_app",
-  "version": "0.1.0",
+  "name": "zeroprep-ai",
+  "version": "1.0.0",
   "private": true,
+  "main": "electron/dist/main.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "next start -p 3001",
+    "lint": "next lint",
+    "electron:compile": "tsc electron/main.ts electron/preload.ts --outDir electron/dist --target es2020 --module commonjs --esModuleInterop --skipLibCheck",
+    "electron:dev": "concurrently -k \"next dev -p 3001\" \"cross-env ELECTRON_START_URL=http://localhost:3001/dashboard/callSessions electron .\""
   },
   "dependencies": {
+    "@google/genai": "^2.21.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.42.0",
     "next": "16.3.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^10.0.5",
+    "cross-env": "^10.1.0",
+    "electron": "^44.2.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",

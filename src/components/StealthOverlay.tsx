@@ -38,6 +38,7 @@ import {
   Terminal
 } from 'lucide-react';
 import { useGeminiKey } from '@/context/GeminiKeyContext';
+import { useAudioLoopback } from '@/hooks/useAudioLoopback';
 import { analyzeScreenAndCode, AnalysisResult } from '@/lib/gemini';
 
 interface StealthOverlayProps {
@@ -167,6 +168,7 @@ export default function StealthOverlay({
   const backspaceKey = isMac ? '⌫' : 'Backspace';
 
   // Live Call Stopwatch / Timer (like "⏹ 27:15" in the video)
+  const [callStartEpoch] = useState(() => Date.now() - 1635 * 1000); // session epoch for loopback timestamps
   const [callSeconds, setCallSeconds] = useState(1635); // 27:15 initial
   const [isTimerRunning, setIsTimerRunning] = useState(true);
 
@@ -202,59 +204,40 @@ export default function StealthOverlay({
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  // ── Dual-Channel Audio Loopback (Interviewer system audio + Candidate mic) ──
+  const audio = useAudioLoopback(callStartEpoch);
+
   // Live Speech Transcription Stream Text
+  // Priority: interviewer loopback first, then candidate mic, then placeholder
   const [speechStream, setSpeechStream] = useState<string>(
     'What is your biggest weakness? Click AI help and ZeroPrepAI will provide an answer based on your resume and...'
   );
+
+  // Keep speechStream in sync with latest audio from either channel.
+  // Interviewers questions take priority since that's what Gemini needs to answer.
+  useEffect(() => {
+    if (audio.interviewerTranscript.trim()) {
+      setSpeechStream(audio.interviewerTranscript);
+    } else if (audio.candidateTranscript.trim()) {
+      setSpeechStream(audio.candidateTranscript);
+    }
+  }, [audio.interviewerTranscript, audio.candidateTranscript]);
+
+  // Auto-start mic when overlay opens and mic is not muted
+  useEffect(() => {
+    if (!isCandidateMicMuted && !audio.isMicActive) {
+      audio.startMic();
+    } else if (isCandidateMicMuted && audio.isMicActive) {
+      audio.stopMic();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCandidateMicMuted]);
 
   // Answer Navigation History
   const [answersList, setAnswersList] = useState<AnswerEntry[]>(DEFAULT_ANSWERS);
   const [activeAnswerIndex, setActiveAnswerIndex] = useState(0);
 
   const currentAnswer = answersList[activeAnswerIndex] || answersList[0];
-
-  // Real-time Web Speech Recognition (when candidate mic is active) - ZP-BUG-009
-  useEffect(() => {
-    if (isCandidateMicMuted || typeof window === 'undefined') return;
-
-    const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
-
-    let recognition: any = null;
-    try {
-      recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-
-      recognition.onresult = (event: any) => {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
-        if (transcript.trim()) {
-          setSpeechStream(transcript.trim());
-        }
-      };
-
-      recognition.onerror = (err: any) => {
-        if (err.error !== 'no-speech' && err.error !== 'aborted') {
-          console.warn('Speech recognition status:', err.error);
-        }
-      };
-
-      recognition.start();
-    } catch (e) {
-      console.warn('SpeechRecognition init skipped:', e);
-    }
-
-    return () => {
-      try {
-        recognition?.stop();
-      } catch {}
-    };
-  }, [isCandidateMicMuted]);
 
   // Hotkey Listeners (ZP-BUG-001 Input Trapping Protected)
   useEffect(() => {
@@ -632,28 +615,47 @@ export default function StealthOverlay({
             <span className="text-xs font-bold tracking-tight text-white">ZeroPrepAI</span>
           </div>
 
-          {/* Audio Monitor / Loopback Indicator */}
-          <div
-            className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-black/40 border border-white/10"
-            title="Speaker loopback audio listening"
+          {/* Audio Loopback Toggle (interviewer system audio) */}
+          <button
+            onClick={() => audio.isLoopbackActive ? audio.stopLoopback() : audio.startLoopback()}
+            className={`flex items-center gap-1 px-1.5 py-0.5 rounded-full border transition cursor-pointer ${
+              audio.loopbackError
+                ? 'bg-rose-500/20 border-rose-500/40'
+                : audio.isLoopbackActive
+                  ? 'bg-black/40 border-white/10 hover:border-white/20'
+                  : 'bg-black/20 border-white/10 opacity-60 hover:opacity-100'
+            }`}
+            title={
+              audio.loopbackError
+                ? `Loopback error: ${audio.loopbackError}`
+                : audio.isLoopbackActive
+                  ? 'Interviewer loopback active — click to stop'
+                  : 'Click to start interviewer audio loopback (captures Zoom/Meet system audio)'
+            }
           >
-            <Volume2 className="h-3 w-3 text-slate-300" />
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-            </span>
-          </div>
+            <Volume2 className={`h-3 w-3 ${audio.loopbackError ? 'text-rose-400' : 'text-slate-300'}`} />
+            {audio.isLoopbackActive ? (
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+            ) : (
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-slate-500"></span>
+              </span>
+            )}
+          </button>
 
           {/* Candidate Mic Toggle */}
           <button
             onClick={() => setIsCandidateMicMuted((prev) => !prev)}
             className="p-1 rounded-full bg-black/40 border border-white/10 hover:border-white/20 transition cursor-pointer"
-            title={isCandidateMicMuted ? 'Mic Muted' : 'Candidate Mic Active'}
+            title={isCandidateMicMuted ? 'Mic Muted — click to unmute' : 'Candidate Mic Active — click to mute'}
           >
             {isCandidateMicMuted ? (
               <MicOff className="h-3 w-3 text-rose-400" />
             ) : (
-              <Mic className="h-3 w-3 text-rose-500" />
+              <Mic className={`h-3 w-3 ${audio.isMicActive ? 'text-emerald-400' : 'text-rose-500'}`} />
             )}
           </button>
         </div>

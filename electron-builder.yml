@@ -1,0 +1,83 @@
+appId: ai.zeroprep.app
+productName: ZeroPrep AI
+copyright: Copyright © 2026 ZeroPrep AI
+
+directories:
+  output: dist-electron
+  buildResources: build/
+
+# Files to include in the packaged app
+files:
+  - .next/standalone/**
+  - .next/static/**
+  - public/**
+  - electron/dist/**
+  - node_modules/electron-is-dev/**
+
+# Extra resources copied next to the app binary
+extraResources:
+  - from: .next/static
+    to: .next/static
+  - from: public
+    to: public
+
+# ─────────────────── macOS ───────────────────
+mac:
+  category: public.app-category.productivity
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+  icon: build/icon.icns
+  # Hardened Runtime required for Notarization (set to true when you have Apple Developer ID)
+  hardenedRuntime: false
+  # Entitlements grant OS permissions (mic, screen capture, audio)
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  gatekeeperAssess: false
+  # Deep-link protocol: zeroprep://auth/callback for Google OAuth
+  protocols:
+    - name: ZeroPrep Auth
+      schemes: [zeroprep]
+
+dmg:
+  title: ZeroPrep AI ${version}
+  icon: build/icon.icns
+  background: build/dmg-background.png
+  sign: false
+
+# ─────────────────── Windows ───────────────────
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+  publisherName: ZeroPrep AI
+  protocols:
+    - name: ZeroPrep Auth
+      schemes: [zeroprep]
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: ZeroPrep AI
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+
+# ─────────────────── Linux ───────────────────
+linux:
+  target: AppImage
+  category: Utility
+  icon: build/icon.png
+  protocols:
+    - name: ZeroPrep Auth
+      schemes: [zeroprep]
+
+# ─────────────────── Auto-Updater ───────────────────
+# Uncomment when you set up GitHub Releases:
+# publish:
+#   provider: github
+#   owner: your-github-username
+#   repo: peter-prep
+#   releaseType: release

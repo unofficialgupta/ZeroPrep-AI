@@ -1,0 +1,20 @@
+# Electron build artifacts — never deploy to Vercel
+dist-electron/
+electron/dist/
+build/
+
+# Electron binaries
+*.dmg
+*.exe
+*.AppImage
+
+# Local env (Vercel env vars are set in the dashboard)
+.env.local
+
+# npm cache
+.npm/
+node_modules/.cache/
+
+# OS files
+.DS_Store
+Thumbs.db

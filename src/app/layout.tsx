@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { GeminiKeyProvider } from '@/context/GeminiKeyContext';
+import { AuthProvider } from '@/context/AuthContext';
 import ApiKeyModal from '@/components/ApiKeyModal';
 
 const jakarta = Plus_Jakarta_Sans({
@@ -32,10 +33,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`light ${jakarta.variable} ${jetbrainsMono.variable}`}>
       <body className="text-slate-900 antialiased min-h-screen font-sans">
-        <GeminiKeyProvider>
-          {children}
-          <ApiKeyModal />
-        </GeminiKeyProvider>
+        <AuthProvider>
+          <GeminiKeyProvider>
+            {children}
+            <ApiKeyModal />
+          </GeminiKeyProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   Volume2,
@@ -15,15 +16,55 @@ import {
   Lock
 } from 'lucide-react';
 
-export const metadata = {
-  title: 'Features | ZeroPrep AI Stealth Interview Copilot',
+export const metadata: Metadata = {
+  title: 'Stealth HUD & Audio Loopback Features | PrepZero AI',
   description:
-    'Explore ZeroPrep AI features: dual-channel audio loopback, undetectable screen overlay, sub-second Gemini 2.5 Flash reasoning, and BYOK privacy.',
+    'Explore PrepZero AI features: dual-channel audio loopback, undetectable screen overlay on Zoom/Meet, sub-800ms Gemini 2.5 Flash reasoning, and BYOK privacy.',
+  alternates: {
+    canonical: 'https://www.prepzero.in/features',
+  },
+  openGraph: {
+    title: 'PrepZero AI Features — Stealth Screen & Audio Copilot',
+    description:
+      'Explore undetectable screen overlays, dual audio loopback, and Gemini 2.5 Flash reasoning for technical coding interviews.',
+    url: 'https://www.prepzero.in/features',
+    siteName: 'PrepZero AI',
+    images: [{ url: '/zeroprep-preview.jpg', width: 1200, height: 630, alt: 'PrepZero AI Features' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PrepZero AI Features — Stealth Screen & Audio Copilot',
+    description: 'Hardware screen protection and dual-channel audio loopback.',
+    images: ['/zeroprep-preview.jpg'],
+  },
 };
 
 export default function FeaturesPage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.prepzero.in',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Features',
+        item: 'https://www.prepzero.in/features',
+      },
+    ],
+  };
+
   return (
     <div className="py-16 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto">
@@ -31,7 +72,7 @@ export default function FeaturesPage() {
             Engineered For Performance
           </span>
           <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
-            Deep-Dive into ZeroPrep AI
+            Deep-Dive into PrepZero AI
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600">
             Explore the technology that makes ZeroPrep AI the most reliable stealth copilot for coding rounds, system design, and technical interviews.

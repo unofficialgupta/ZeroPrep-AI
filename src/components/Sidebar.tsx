@@ -15,6 +15,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useGeminiKey } from '@/context/GeminiKeyContext';
+import PrepZeroLogo from '@/components/PrepZeroLogo';
 
 const NAV_ITEMS = [
   {
@@ -64,38 +65,16 @@ export default function Sidebar() {
     <aside className="flex h-screen w-64 flex-col justify-between border-r border-slate-200 bg-white p-4 select-none">
       {/* Top Section: Logo & Nav */}
       <div className="space-y-6">
-        {/* ZeroPrep Brand Emblem */}
-        <Link href="/dashboard/callSessions" className="flex items-center gap-3 px-2 py-1 group">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#0052cc] text-white shadow-md shadow-[#0052cc]/25 group-hover:scale-105 transition-transform duration-200">
-            <svg
-              className="h-6 w-6 text-white drop-shadow"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M16 3h5v5" />
-              <path d="M4 20L21 3" />
-              <path d="M21 16v5h-5" />
-              <path d="M15 15l6 6" />
-              <path d="M4 4l5 5" />
-            </svg>
-            <div className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blue-400">
-              <span className="h-2 w-2 rounded-full bg-white animate-pulse" />
-            </div>
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-base font-bold tracking-tight text-slate-900">ZeroPrep</span>
-              <span className="rounded bg-[#0052cc]/10 border border-[#0052cc]/20 px-1.5 py-0.2 text-[10px] font-bold text-[#0052cc]">
-                AI
-              </span>
-            </div>
-            <p className="text-[11px] font-medium text-slate-500">Interview & Code Copilot</p>
-          </div>
-        </Link>
+        {/* PrepZero Brand Emblem */}
+        <div className="px-2 py-1">
+          <PrepZeroLogo
+            size="md"
+            variant="horizontal"
+            showTagline={true}
+            tagline="Real-Time Stealth Copilot"
+            href="/dashboard/callSessions"
+          />
+        </div>
 
         {/* Navigation Links */}
         <nav className="space-y-1">

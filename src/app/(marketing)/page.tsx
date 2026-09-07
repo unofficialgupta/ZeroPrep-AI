@@ -1,10 +1,8 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  Download,
   Shield,
   Zap,
   Mic,
@@ -14,73 +12,55 @@ import {
   ArrowRight,
   CheckCircle2,
   Check,
-  ChevronDown,
   Monitor,
   Terminal,
   ExternalLink,
   Laptop,
   Layers,
-  Lock
+  Lock,
 } from 'lucide-react';
+import HeroDownloadCta from '@/components/marketing/HeroDownloadCta';
+import FaqAccordion from '@/components/marketing/FaqAccordion';
+import PrepZeroLogo from '@/components/PrepZeroLogo';
+
+export const metadata: Metadata = {
+  title: 'PrepZero AI — Stealth Real-Time Interview & DSA Coding Copilot',
+  description:
+    'Undetectable AI copilot for technical interviews, DSA rounds, and system design assessments. Invisible on Zoom, Google Meet & Teams. Dual-channel audio loopback and sub-800ms Google Gemini 2.5 Flash reasoning.',
+  alternates: {
+    canonical: 'https://www.prepzero.in',
+  },
+  openGraph: {
+    title: 'PrepZero AI — Stealth Real-Time Interview & DSA Coding Copilot',
+    description:
+      'Never freeze in a technical interview again. Invisible screen OCR over Zoom/Meet, internal audio loopback, and sub-800ms Gemini 2.5 Flash algorithms.',
+    url: 'https://www.prepzero.in',
+    siteName: 'PrepZero AI',
+    images: [
+      {
+        url: '/zeroprep-preview.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'PrepZero AI Real-time Stealth Copilot Preview',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PrepZero AI — Stealth Real-Time Interview & DSA Copilot',
+    description:
+      'Ace any technical interview with zero prep. Undetectable on screen share, dual-channel audio loopback, and Gemini 2.5 Flash reasoning.',
+    images: ['/zeroprep-preview.jpg'],
+  },
+};
 
 export default function MarketingHomePage() {
-  const [userOS, setUserOS] = useState<'mac' | 'windows' | 'linux'>('mac');
-  const [faqOpen, setFaqOpen] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const ua = navigator.userAgent.toLowerCase();
-      if (ua.includes('win')) {
-        setUserOS('windows');
-      } else if (ua.includes('linux')) {
-        setUserOS('linux');
-      } else {
-        setUserOS('mac');
-      }
-    }
-  }, []);
-
-  const getDownloadHref = (os: 'mac' | 'windows' | 'linux') => {
-    switch (os) {
-      case 'windows':
-        return '/downloads/ZeroPrep-AI-Setup-1.0.0.exe';
-      case 'linux':
-        return '/downloads/ZeroPrep-AI-1.0.0.AppImage';
-      case 'mac':
-      default:
-        return '/downloads/ZeroPrep-AI-1.0.0.dmg';
-    }
-  };
-
-  const getDownloadFilename = (os: 'mac' | 'windows' | 'linux') => {
-    switch (os) {
-      case 'windows':
-        return 'ZeroPrep-AI-Setup-1.0.0.exe';
-      case 'linux':
-        return 'ZeroPrep-AI-1.0.0.AppImage';
-      case 'mac':
-      default:
-        return 'ZeroPrep-AI-1.0.0.dmg';
-    }
-  };
-
-  const getOSLabel = (os: 'mac' | 'windows' | 'linux') => {
-    switch (os) {
-      case 'windows':
-        return 'Windows (64-bit .exe)';
-      case 'linux':
-        return 'Linux (.AppImage)';
-      case 'mac':
-      default:
-        return 'macOS (.dmg Apple Silicon / Intel)';
-    }
-  };
-
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'ZeroPrep AI',
-    applicationCategory: 'BusinessApplication',
+    name: 'PrepZero AI',
+    alternateName: 'ZeroPrep AI',
+    applicationCategory: 'DeveloperApplication',
     operatingSystem: 'macOS, Windows, Linux',
     offers: {
       '@type': 'Offer',
@@ -109,77 +89,30 @@ export default function MarketingHomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/80 px-3.5 py-1.5 text-xs font-semibold text-blue-700 shadow-sm backdrop-blur-md mb-6 hover:bg-blue-100/80 transition-colors">
-            <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse" />
-            <span>ZeroPrep AI Desktop v1.0 Released</span>
+            <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>PrepZero AI Desktop v1.0 Released</span>
             <span className="text-blue-400">•</span>
-            <span className="text-blue-600 font-medium">100% Invisible to Zoom & Meet</span>
+            <span className="text-blue-600 font-medium">100% Invisible to Zoom, Meet & Teams</span>
           </div>
 
           {/* Headline */}
           <h1 className="mx-auto max-w-4xl text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1] sm:leading-[1.08]">
             Never Freeze in a{' '}
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-800 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 bg-clip-text text-transparent">
               Technical Interview
             </span>{' '}
             Again.
           </h1>
 
-          {/* Subtitle */}
-          <p className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-slate-600 leading-relaxed">
-            The high-performance AI copilot that hears your interviewer through internal audio loopback,
-            analyzes your live code editor, and suggests optimal solutions in real time — completely undetectable on screen share.
+          {/* Subtitle / Tagline */}
+          <p className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-slate-600 leading-relaxed font-normal">
+            <strong className="font-semibold text-slate-900">Ace Any Interview. Zero Prep Required.</strong>{' '}
+            The high-performance stealth AI copilot that captures your interviewer&apos;s voice through internal audio loopback,
+            reads your live code editor via OCR, and delivers optimal solutions in real time — completely undetectable on screen share.
           </p>
 
-          {/* Download CTA Buttons */}
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            {/* Primary Detected Download */}
-            <a
-              href={getDownloadHref(userOS)}
-              download={getDownloadFilename(userOS)}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-blue-500/25 transition-all hover:from-blue-700 hover:to-indigo-700 hover:shadow-2xl hover:shadow-blue-500/35 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-            >
-              <Download className="h-5 w-5" />
-              <span>Download for {getOSLabel(userOS)}</span>
-            </a>
-
-            {/* Other Platforms Selector / Direct Hub */}
-            <Link
-              href="/download"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white/90 px-6 py-4 text-base font-semibold text-slate-700 shadow-sm backdrop-blur-md transition-all hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300"
-            >
-              <Laptop className="h-4 w-4 text-slate-500" />
-              <span>All Downloads & OS versions</span>
-              <ArrowRight className="h-4 w-4 text-slate-400" />
-            </Link>
-          </div>
-
-          {/* OS Quick Links & Guarantees */}
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500 font-medium">
-            <span>Also available for:</span>
-            <a
-              href="/downloads/ZeroPrep-AI-1.0.0.dmg"
-              download="ZeroPrep-AI-1.0.0.dmg"
-              className="hover:text-blue-600 transition-colors underline underline-offset-2"
-            >
-              macOS (.dmg)
-            </a>
-            <span>•</span>
-            <a
-              href="/downloads/ZeroPrep-AI-Setup-1.0.0.exe"
-              download="ZeroPrep-AI-Setup-1.0.0.exe"
-              className="hover:text-blue-600 transition-colors underline underline-offset-2"
-            >
-              Windows (.exe)
-            </a>
-            <span>•</span>
-            <a
-              href="/downloads/ZeroPrep-AI-1.0.0.AppImage"
-              download="ZeroPrep-AI-1.0.0.AppImage"
-              className="hover:text-blue-600 transition-colors underline underline-offset-2"
-            >
-              Linux (.AppImage)
-            </a>
-          </div>
+          {/* Hero Download CTA Buttons */}
+          <HeroDownloadCta variant="hero" />
 
           {/* Trust Guarantees */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm text-slate-600 font-medium">
@@ -211,7 +144,7 @@ export default function MarketingHomePage() {
                   <span className="h-3 w-3 rounded-full bg-amber-500/80" />
                   <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
                   <span className="ml-2 text-xs font-mono text-slate-400">
-                    ZeroPrep AI Stealth HUD — Live Audio & Screen Session
+                    PrepZero AI Stealth HUD — Live Audio & Screen Session
                   </span>
                 </div>
                 <div className="flex items-center gap-2 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-800/50">
@@ -224,7 +157,7 @@ export default function MarketingHomePage() {
               <div className="relative aspect-video w-full bg-slate-950">
                 <Image
                   src="/zeroprep-preview.jpg"
-                  alt="ZeroPrep AI Stealth HUD Interface"
+                  alt="PrepZero AI Stealth HUD Interface Preview"
                   width={1280}
                   height={720}
                   priority
@@ -251,175 +184,106 @@ export default function MarketingHomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 text-center">
             <div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-blue-600 tracking-tight">0.00%</div>
-              <div className="mt-1 text-sm font-medium text-slate-600">Screen Capture Leak Rate</div>
-              <div className="text-xs text-slate-400">OS Window Exclusion</div>
+              <p className="text-3xl sm:text-4xl font-black text-slate-900">&lt; 800ms</p>
+              <p className="mt-1 text-xs sm:text-sm font-medium text-slate-500">
+                End-to-End Latency
+              </p>
             </div>
             <div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">&lt; 650ms</div>
-              <div className="mt-1 text-sm font-medium text-slate-600">Gemini 2.5 Flash Response</div>
-              <div className="text-xs text-slate-400">Direct Google AI Endpoint</div>
+              <p className="text-3xl sm:text-4xl font-black text-blue-600">0%</p>
+              <p className="mt-1 text-xs sm:text-sm font-medium text-slate-500">
+                Screen Capture Leakage
+              </p>
             </div>
             <div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-blue-600 tracking-tight">2-Way</div>
-              <div className="mt-1 text-sm font-medium text-slate-600">Synchronous Audio</div>
-              <div className="text-xs text-slate-400">Interviewer + Your Mic</div>
+              <p className="text-3xl sm:text-4xl font-black text-slate-900">$0 / mo</p>
+              <p className="mt-1 text-xs sm:text-sm font-medium text-slate-500">
+                With Free Gemini Tier
+              </p>
             </div>
             <div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">$0 / mo</div>
-              <div className="mt-1 text-sm font-medium text-slate-600">No Monthly Fees</div>
-              <div className="text-xs text-slate-400">Bring Your Own Key (BYOK)</div>
+              <p className="text-3xl sm:text-4xl font-black text-emerald-600">100%</p>
+              <p className="mt-1 text-xs sm:text-sm font-medium text-slate-500">
+                Client-Side Data Privacy
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─────────────────── 4 CORE PILLARS ─────────────────── */}
-      <section className="py-20 sm:py-28 bg-slate-50/60">
+      {/* ─────────────────── CORE PILLARS ─────────────────── */}
+      <section className="py-20 sm:py-28 bg-slate-50/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
             <h2 className="text-xs font-bold uppercase tracking-widest text-blue-600">
-              Unmatched Architecture
+              Engineered For The Real World
             </h2>
             <p className="mt-3 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Engineered specifically for live coding and technical evaluations.
+              Four breakthroughs that make PrepZero AI untraceable.
             </p>
-            <p className="mt-4 text-slate-600 text-base sm:text-lg">
-              Unlike generic browser extensions or clunky bots that join your call, ZeroPrep AI is a native
-              desktop application running purely client-side.
+            <p className="mt-4 text-base text-slate-600">
+              Unlike web extensions or clunky second-screen setups, PrepZero AI is built from the ground up as a native desktop HUD.
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {/* Feature 1 */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:shadow-md hover:border-blue-200">
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Card 1 */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 mb-5">
                 <Volume2 className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">System Audio Loopback</h3>
+              <h3 className="text-lg font-bold text-slate-900">Audio Loopback</h3>
               <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Captures the interviewer speaking directly from your headphones or system audio. No virtual audio cables (BlackHole/VB-Cable) required.
+                Captures incoming interviewer audio directly from system output. No virtual audio cables or sound routing required.
               </p>
-              <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-blue-600">
-                <span>Integrated native capture</span>
-                <ArrowRight className="h-3 w-3" />
+              <div className="mt-4 text-xs font-semibold text-blue-600 flex items-center gap-1">
+                <span>Headphone compatible</span>
+                <Check className="h-3.5 w-3.5" />
               </div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:shadow-md hover:border-blue-200">
+            {/* Card 2 */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 mb-5">
                 <EyeOff className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">100% Screen Share Invisible</h3>
+              <h3 className="text-lg font-bold text-slate-900">Stealth HUD Overlay</h3>
               <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Utilizes OS-level Window Exclusion flags (`setContentProtection`). When you share your entire desktop or browser on Zoom, the HUD simply does not appear.
+                OS-level content protection guarantees the overlay is invisible when sharing screens on Zoom, Google Meet, or Microsoft Teams.
               </p>
-              <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-indigo-600">
-                <span>Verified on Zoom, Meet & Teams</span>
-                <ArrowRight className="h-3 w-3" />
+              <div className="mt-4 text-xs font-semibold text-indigo-600 flex items-center gap-1">
+                <span>Hardware level exclusion</span>
+                <Check className="h-3.5 w-3.5" />
               </div>
             </div>
 
-            {/* Feature 3 */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:shadow-md hover:border-blue-200">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-5">
+            {/* Card 3 */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 mb-5">
                 <Sparkles className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Google Gemini 2.5 Flash</h3>
+              <h3 className="text-lg font-bold text-slate-900">Gemini 2.5 Flash</h3>
               <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Sub-second reasoning, syntax analysis, time/space complexity calculations, edge-case generation, and STAR-format behavioral coaching.
+                Sub-800ms multimodal inference. Solves LeetCode Hard DSA questions, calculates Big-O complexity, and generates clean code snippets.
               </p>
-              <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
-                <span>2M context window support</span>
-                <ArrowRight className="h-3 w-3" />
+              <div className="mt-4 text-xs font-semibold text-amber-600 flex items-center gap-1">
+                <span>1M+ token context</span>
+                <Check className="h-3.5 w-3.5" />
               </div>
             </div>
 
-            {/* Feature 4 */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:shadow-md hover:border-blue-200">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600 mb-5">
-                <Shield className="h-6 w-6" />
+            {/* Card 4 */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 mb-5">
+                <Lock className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Bring Your Own Key (BYOK)</h3>
+              <h3 className="text-lg font-bold text-slate-900">Bring Your Own Key</h3>
               <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                Never pay a $30-$50 monthly subscription mark-up. Plug in your free Google Gemini API key and query Google directly at zero cost.
+                100% free via Google AI Studio tier. Your API key and interview conversations remain strictly on your local computer.
               </p>
-              <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-purple-600">
-                <span>Your key stays in local storage</span>
-                <ArrowRight className="h-3 w-3" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────── HOW IT WORKS (3 STEPS) ─────────────────── */}
-      <section className="py-20 sm:py-28 bg-white border-b border-slate-200">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-blue-600">
-              Simple 3-Minute Setup
-            </h2>
-            <p className="mt-3 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Ready before your next interview round begins.
-            </p>
-          </div>
-
-          <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
-            {/* Step 1 */}
-            <div className="relative rounded-2xl border border-slate-200 bg-slate-50/50 p-8">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white font-bold text-sm shadow-md shadow-blue-500/30 mb-6">
-                1
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Download & Launch</h3>
-              <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-                Download the lightweight installer (.dmg for Mac, .exe for Windows). Open the app and sign in securely with your Google account.
-              </p>
-              <div className="mt-6">
-                <a
-                  href={getDownloadHref(userOS)}
-                  download={getDownloadFilename(userOS)}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800"
-                >
-                  <Download className="h-3.5 w-3.5" />
-                  <span>Download {getOSLabel(userOS)}</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="relative rounded-2xl border border-slate-200 bg-slate-50/50 p-8">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-600 text-white font-bold text-sm shadow-md shadow-indigo-500/30 mb-6">
-                2
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Add Your Gemini Key</h3>
-              <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-                Paste your free Google Gemini API key. Google gives every developer a generous free tier (15 requests/min) with zero cost.
-              </p>
-              <div className="mt-6">
-                <Link
-                  href="/blog/how-to-get-free-gemini-api-key"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-800"
-                >
-                  <span>Read 2-minute API key guide</span>
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="relative rounded-2xl border border-slate-200 bg-slate-50/50 p-8">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-sm shadow-md shadow-emerald-500/30 mb-6">
-                3
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Ace Your Interview</h3>
-              <p className="mt-3 text-sm text-slate-600 leading-relaxed">
-                Press <code className="rounded bg-slate-200 px-1.5 py-0.5 text-xs font-mono text-slate-800">Cmd+Shift+P</code> during your call. The transparent HUD appears over your coding editor with live hints.
-              </p>
-              <div className="mt-6 flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                <span>Screen share safe & invisible</span>
+              <div className="mt-4 text-xs font-semibold text-emerald-600 flex items-center gap-1">
+                <span>Zero monthly fees</span>
+                <Check className="h-3.5 w-3.5" />
               </div>
             </div>
           </div>
@@ -427,76 +291,68 @@ export default function MarketingHomePage() {
       </section>
 
       {/* ─────────────────── COMPARISON TABLE ─────────────────── */}
-      <section className="py-20 sm:py-28 bg-slate-50/50">
+      <section className="py-20 sm:py-28 bg-white">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto">
+          <div className="text-center">
             <h2 className="text-xs font-bold uppercase tracking-widest text-blue-600">
-              ZeroPrep vs Others
+              Unmatched Value
             </h2>
             <p className="mt-3 text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Why engineers choose ZeroPrep AI over expensive subscriptions.
+              Why Engineers Choose PrepZero AI
             </p>
           </div>
 
-          <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <table className="w-full text-left border-collapse">
+          <div className="mt-12 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <table className="w-full text-left border-collapse text-sm">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50/80">
-                  <th className="p-4 sm:p-5 text-sm font-semibold text-slate-900">Feature</th>
-                  <th className="p-4 sm:p-5 text-sm font-bold text-blue-600 bg-blue-50/50">
-                    ZeroPrep AI
+                <tr className="border-b border-slate-200 bg-slate-50">
+                  <th className="p-4 sm:p-5 font-semibold text-slate-900">Feature</th>
+                  <th className="p-4 sm:p-5 font-bold text-blue-600 bg-blue-50/50">
+                    PrepZero AI
                   </th>
-                  <th className="p-4 sm:p-5 text-sm font-semibold text-slate-500">
-                    Final Round AI
-                  </th>
-                  <th className="p-4 sm:p-5 text-sm font-semibold text-slate-500">
-                    Standard ChatGPT
-                  </th>
+                  <th className="p-4 sm:p-5 font-semibold text-slate-600">Final Round AI</th>
+                  <th className="p-4 sm:p-5 font-semibold text-slate-600">ChatGPT Plus</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-sm">
+              <tbody className="divide-y divide-slate-200">
                 <tr>
-                  <td className="p-4 sm:p-5 font-medium text-slate-800">
-                    Audio Loopback (Hear Interviewer)
-                  </td>
-                  <td className="p-4 sm:p-5 text-emerald-600 font-semibold bg-blue-50/30">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Check className="h-4 w-4" /> Native dual-channel
-                    </span>
-                  </td>
-                  <td className="p-4 sm:p-5 text-slate-500">Requires bot or mic echo</td>
-                  <td className="p-4 sm:p-5 text-red-500">None (Manual typing)</td>
-                </tr>
-                <tr>
-                  <td className="p-4 sm:p-5 font-medium text-slate-800">
-                    Screen Share Undetectable
-                  </td>
-                  <td className="p-4 sm:p-5 text-emerald-600 font-semibold bg-blue-50/30">
-                    <span className="inline-flex items-center gap-1.5">
-                      <Check className="h-4 w-4" /> 100% Window Excluded
-                    </span>
-                  </td>
-                  <td className="p-4 sm:p-5 text-amber-600">Partial / Glitchy</td>
-                  <td className="p-4 sm:p-5 text-red-500">Visible on screen</td>
-                </tr>
-                <tr>
-                  <td className="p-4 sm:p-5 font-medium text-slate-800">
-                    Monthly Cost
-                  </td>
+                  <td className="p-4 sm:p-5 font-medium text-slate-800">Monthly Price</td>
                   <td className="p-4 sm:p-5 text-emerald-600 font-bold bg-blue-50/30">
-                    $0 / mo (Free BYOK)
+                    $0 (BYOK Free Tier)
                   </td>
-                  <td className="p-4 sm:p-5 text-slate-700 font-medium">$49 - $149 / mo</td>
-                  <td className="p-4 sm:p-5 text-slate-700 font-medium">$20 / mo</td>
+                  <td className="p-4 sm:p-5 text-slate-500">$99 / month</td>
+                  <td className="p-4 sm:p-5 text-slate-500">$20 / month</td>
                 </tr>
                 <tr>
                   <td className="p-4 sm:p-5 font-medium text-slate-800">
-                    Model Reasoning Engine
+                    Screen-Share Invisibility
                   </td>
-                  <td className="p-4 sm:p-5 text-blue-600 font-semibold bg-blue-50/30">
-                    Gemini 2.5 Flash / Pro
+                  <td className="p-4 sm:p-5 text-emerald-600 font-semibold bg-blue-50/30">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check className="h-4 w-4" /> Native OS Content Protection
+                    </span>
                   </td>
-                  <td className="p-4 sm:p-5 text-slate-600">Custom GPT-3.5/4 wrapper</td>
+                  <td className="p-4 sm:p-5 text-slate-500">Partial</td>
+                  <td className="p-4 sm:p-5 text-rose-500 font-medium">None (Visible)</td>
+                </tr>
+                <tr>
+                  <td className="p-4 sm:p-5 font-medium text-slate-800">
+                    Audio Loopback (Interviewer Voice)
+                  </td>
+                  <td className="p-4 sm:p-5 text-emerald-600 font-semibold bg-blue-50/30">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Check className="h-4 w-4" /> Automatic internal loopback
+                    </span>
+                  </td>
+                  <td className="p-4 sm:p-5 text-slate-500">External app required</td>
+                  <td className="p-4 sm:p-5 text-rose-500 font-medium">Mic only</td>
+                </tr>
+                <tr>
+                  <td className="p-4 sm:p-5 font-medium text-slate-800">AI Model Engine</td>
+                  <td className="p-4 sm:p-5 text-slate-800 font-semibold bg-blue-50/30">
+                    Gemini 2.5 Flash
+                  </td>
+                  <td className="p-4 sm:p-5 text-slate-500">Proprietary / Claude</td>
                   <td className="p-4 sm:p-5 text-slate-600">GPT-4o</td>
                 </tr>
                 <tr>
@@ -529,52 +385,7 @@ export default function MarketingHomePage() {
             </p>
           </div>
 
-          <div className="mt-12 space-y-4">
-            {[
-              {
-                q: 'How does ZeroPrep AI remain invisible during screen sharing?',
-                a: 'ZeroPrep AI desktop app uses native operating system window exclusion APIs (such as macOS `setContentProtection(true)` and Windows `SetWindowDisplayAffinity`). When applications like Zoom, Google Meet, Microsoft Teams, or HackerRank capture your display or window, the OS hardware compositor completely strips the ZeroPrep HUD from the captured video feed. You see it; your interviewer cannot.',
-              },
-              {
-                q: 'How does Audio Loopback capture the interviewer’s voice?',
-                a: 'ZeroPrep AI features an integrated dual-channel audio pipeline. It captures your microphone input while simultaneously tapping the system audio output loopback. This allows the speech-to-text pipeline to capture questions from the interviewer even if you are wearing headphones, without requiring third-party tools like BlackHole or VB-Cable.',
-              },
-              {
-                q: 'Is ZeroPrep AI really free to use?',
-                a: 'Yes! ZeroPrep AI operates on a Bring Your Own Key (BYOK) architecture. Google offers a generous free tier for Google Gemini 2.5 Flash through Google AI Studio (up to 15 requests per minute at $0 cost). You paste your own key and get enterprise-grade AI reasoning without paying any monthly software subscriptions.',
-              },
-              {
-                q: 'What platforms and operating systems are supported?',
-                a: 'ZeroPrep AI is packaged for macOS (both Apple Silicon M1/M2/M3/M4 and Intel chips via .dmg), Windows 10/11 (64-bit .exe), and Linux (.AppImage). A web version is also available for practice sessions.',
-              },
-              {
-                q: 'Are my audio recordings or interview questions stored on your servers?',
-                a: 'No. ZeroPrep AI does not store, record, or retain your audio or transcript content. All transcription and AI queries communicate directly from your computer to the Google Gemini API using your personal API key.',
-              },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl border border-slate-200 bg-slate-50/60 overflow-hidden transition-colors"
-              >
-                <button
-                  onClick={() => setFaqOpen(faqOpen === idx ? null : idx)}
-                  className="w-full flex items-center justify-between p-5 text-left text-base font-semibold text-slate-900 hover:text-blue-600"
-                >
-                  <span>{item.q}</span>
-                  <ChevronDown
-                    className={`h-5 w-5 text-slate-400 transition-transform duration-200 ${
-                      faqOpen === idx ? 'rotate-180 text-blue-600' : ''
-                    }`}
-                  />
-                </button>
-                {faqOpen === idx && (
-                  <div className="px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-200/60 pt-4 bg-white">
-                    {item.a}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          <FaqAccordion />
         </div>
       </section>
 
@@ -583,6 +394,15 @@ export default function MarketingHomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.2),transparent_50%)]" />
 
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-6">
+            <PrepZeroLogo
+              size="lg"
+              theme="dark"
+              showTagline={false}
+              href="/"
+            />
+          </div>
+
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
             Stop worrying about freezing.{' '}
             <span className="text-blue-400">Start passing rounds.</span>
@@ -591,22 +411,8 @@ export default function MarketingHomePage() {
             Download the desktop app today. Setup takes under 3 minutes, requires zero credit cards, and runs 100% free with your own Gemini key.
           </p>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href={getDownloadHref(userOS)}
-              download={getDownloadFilename(userOS)}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-2xl bg-blue-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-blue-500/30 transition-all hover:bg-blue-500 hover:scale-105 active:scale-100 cursor-pointer"
-            >
-              <Download className="h-5 w-5" />
-              <span>Download for {getOSLabel(userOS)}</span>
-            </a>
-            <Link
-              href="/download"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-700 bg-slate-800/80 px-6 py-4 text-base font-semibold text-slate-200 hover:bg-slate-700 transition-colors"
-            >
-              <span>View All Platforms (.dmg, .exe)</span>
-              <ArrowRight className="h-4 w-4 text-slate-400" />
-            </Link>
+          <div className="mt-10">
+            <HeroDownloadCta variant="banner" />
           </div>
 
           <div className="mt-6 flex items-center justify-center gap-6 text-xs text-slate-400">
@@ -614,7 +420,7 @@ export default function MarketingHomePage() {
             <span>•</span>
             <span>Direct Safe Download</span>
             <span>•</span>
-            <span>macOS & Windows</span>
+            <span>macOS & Windows & Linux</span>
           </div>
         </div>
       </section>

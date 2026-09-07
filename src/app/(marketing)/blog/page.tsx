@@ -1,17 +1,57 @@
-import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Clock, Tag } from 'lucide-react';
 import { BLOG_POSTS } from '@/lib/blog-data';
 
-export const metadata = {
-  title: 'Guides & Resources | ZeroPrep AI Blog',
+export const metadata: Metadata = {
+  title: 'Guides & Resources | PrepZero AI Blog',
   description:
-    'Free guides on Gemini API keys, BYOK AI tools, and cracking technical coding interviews with undetectable AI copilots.',
+    'Free tutorials on setting up your free Google Gemini API key, BYOK AI tool economics, and acing technical coding interviews with undetectable AI copilots.',
+  alternates: {
+    canonical: 'https://www.prepzero.in/blog',
+  },
+  openGraph: {
+    title: 'PrepZero AI Blog — Free Guides & Resources',
+    description:
+      'Tutorials on Google Gemini API keys, stealth interview best practices, and cracking DSA coding rounds.',
+    url: 'https://www.prepzero.in/blog',
+    siteName: 'PrepZero AI',
+    images: [{ url: '/zeroprep-preview.jpg', width: 1200, height: 630, alt: 'PrepZero AI Blog' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PrepZero AI Knowledge Base & Guides',
+    description: 'Free tutorials on cracking technical interviews with undetectable AI copilots.',
+    images: ['/zeroprep-preview.jpg'],
+  },
 };
 
 export default function BlogIndexPage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.prepzero.in',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: 'https://www.prepzero.in/blog',
+      },
+    ],
+  };
+
   return (
     <div className="py-16 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto">

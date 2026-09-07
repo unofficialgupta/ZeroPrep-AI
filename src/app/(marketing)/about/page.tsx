@@ -1,16 +1,56 @@
-import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ShieldCheck, Lock, Download, Zap, Heart, CheckCircle2 } from 'lucide-react';
 
-export const metadata = {
-  title: 'About & Privacy Architecture | ZeroPrep AI',
+export const metadata: Metadata = {
+  title: 'About & Privacy Architecture | PrepZero AI',
   description:
-    'Learn about ZeroPrep AI mission, privacy architecture, client-side encryption, and zero data selling pledge.',
+    'Learn about PrepZero AI mission, zero-data-retention privacy architecture, client-side encryption, and open BYOK philosophy.',
+  alternates: {
+    canonical: 'https://www.prepzero.in/about',
+  },
+  openGraph: {
+    title: 'About PrepZero AI — Privacy & Engineering Philosophy',
+    description:
+      'Engineered for maximum privacy. Zero cloud recording, zero data retention, and 100% client-side execution.',
+    url: 'https://www.prepzero.in/about',
+    siteName: 'PrepZero AI',
+    images: [{ url: '/zeroprep-preview.jpg', width: 1200, height: 630, alt: 'About PrepZero AI' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About PrepZero AI — Privacy & Security Architecture',
+    description: 'Learn about our 100% client-side privacy architecture.',
+    images: ['/zeroprep-preview.jpg'],
+  },
 };
 
 export default function AboutPage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.prepzero.in',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'About',
+        item: 'https://www.prepzero.in/about',
+      },
+    ],
+  };
+
   return (
     <div className="py-16 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center">

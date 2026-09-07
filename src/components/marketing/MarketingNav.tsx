@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Zap, Download, Menu, X, ArrowRight, ShieldCheck } from 'lucide-react';
+import PrepZeroLogo from '@/components/PrepZeroLogo';
 
 export default function MarketingNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -10,20 +11,14 @@ export default function MarketingNav() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-xl transition-all">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-600 shadow-md shadow-blue-500/20 text-white transition-transform group-hover:scale-105">
-            <Zap className="h-5 w-5 fill-current" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-lg tracking-tight text-slate-900 flex items-center gap-1.5">
-              ZeroPrep <span className="text-blue-600">AI</span>
-            </span>
-            <span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
-              Stealth Copilot
-            </span>
-          </div>
-        </Link>
+        {/* Brand Logo with Tagline */}
+        <PrepZeroLogo
+          size="md"
+          variant="horizontal"
+          showTagline={true}
+          tagline="Stealth Interview Copilot"
+          href="/"
+        />
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-600">

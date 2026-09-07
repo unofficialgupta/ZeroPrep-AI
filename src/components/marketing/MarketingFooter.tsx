@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Zap, ShieldCheck, Download, Cpu, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Download, Cpu, ExternalLink } from 'lucide-react';
+import PrepZeroLogo from '@/components/PrepZeroLogo';
 
 export default function MarketingFooter() {
   return (
@@ -9,17 +10,16 @@ export default function MarketingFooter() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-5">
           {/* Brand info */}
           <div className="space-y-4 md:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm">
-                <Zap className="h-4 w-4 fill-current" />
-              </div>
-              <span className="text-lg font-bold tracking-tight text-slate-900">
-                ZeroPrep <span className="text-blue-600">AI</span>
-              </span>
-            </Link>
+            <PrepZeroLogo
+              size="lg"
+              variant="horizontal"
+              showTagline={true}
+              tagline="Ace Any Interview. Zero Prep Required."
+              href="/"
+            />
             <p className="text-sm leading-relaxed text-slate-500 max-w-sm">
-              The stealth AI copilot for engineers, architects, and technical professionals.
-              Real-time loopback transcription and instant Gemini 2.5 reasoning without screen capture detection.
+              The undetectable real-time AI copilot for engineers, architects, and technical professionals.
+              Dual-channel audio loopback and sub-800ms Gemini 2.5 reasoning without screen capture detection.
             </p>
             <div className="flex items-center gap-2 text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full w-fit border border-slate-200/80">
               <ShieldCheck className="h-4 w-4 text-emerald-600" />
@@ -141,7 +141,7 @@ export default function MarketingFooter() {
 
         {/* Bottom bar */}
         <div className="mt-12 border-t border-slate-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} ZeroPrep AI. Engineered for privacy & high performance.</p>
+          <p>© {new Date().getFullYear()} PrepZero AI (www.prepzero.in). Engineered for privacy & high performance.</p>
           <div className="flex items-center gap-6">
             <Link href="/about" className="hover:text-slate-800 transition-colors">
               Privacy Policy

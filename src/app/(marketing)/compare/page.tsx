@@ -1,16 +1,56 @@
-import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Check, X, Download, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 
-export const metadata = {
-  title: 'ZeroPrep AI vs Competitors | Alternative to Final Round AI',
+export const metadata: Metadata = {
+  title: 'PrepZero AI vs Competitors | Alternative to Final Round AI & ChatGPT',
   description:
-    'Compare ZeroPrep AI against Final Round AI, ChatGPT, and subscription interview copilots. Discover why zero-subscription BYOK is superior.',
+    'Compare PrepZero AI against Final Round AI, ChatGPT, and subscription interview tools. True screen-share invisibility, internal audio loopback, and $0 BYOK pricing.',
+  alternates: {
+    canonical: 'https://www.prepzero.in/compare',
+  },
+  openGraph: {
+    title: 'PrepZero AI vs Competitors — Feature & Cost Comparison',
+    description:
+      'Zero subscriptions vs $99/mo apps. See why engineers prefer PrepZero AI for real-time technical interview assistance.',
+    url: 'https://www.prepzero.in/compare',
+    siteName: 'PrepZero AI',
+    images: [{ url: '/zeroprep-preview.jpg', width: 1200, height: 630, alt: 'PrepZero AI Comparison' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PrepZero AI vs Final Round AI & ChatGPT',
+    description: '100% invisible on Zoom & Google Meet. Zero monthly fees.',
+    images: ['/zeroprep-preview.jpg'],
+  },
 };
 
 export default function ComparePage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.prepzero.in',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Compare',
+        item: 'https://www.prepzero.in/compare',
+      },
+    ],
+  };
+
   return (
     <div className="py-16 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto">

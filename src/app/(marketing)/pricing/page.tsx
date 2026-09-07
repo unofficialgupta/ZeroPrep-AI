@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   Check,
@@ -8,23 +9,59 @@ import {
   ArrowRight,
   ShieldCheck,
   Cpu,
-  Sparkles
+  Sparkles,
 } from 'lucide-react';
 
-export const metadata = {
-  title: 'Pricing & BYOK Model | ZeroPrep AI',
+export const metadata: Metadata = {
+  title: '100% Free BYOK Pricing | PrepZero AI',
   description:
-    'ZeroPrep AI is 100% free with Bring-Your-Own-Key (BYOK). Never pay recurring monthly subscriptions for interview copilots again.',
+    'PrepZero AI is 100% free with Bring-Your-Own-Key (BYOK). Never pay recurring monthly subscriptions for technical interview copilots again.',
+  alternates: {
+    canonical: 'https://www.prepzero.in/pricing',
+  },
+  openGraph: {
+    title: 'PrepZero AI Pricing — 100% Free BYOK Architecture',
+    description:
+      'Skip the $50-$100/mo subscription traps. Connect your free Google Gemini API key and get unlimited AI interview prep at $0 cost.',
+    url: 'https://www.prepzero.in/pricing',
+    siteName: 'PrepZero AI',
+    images: [{ url: '/zeroprep-preview.jpg', width: 1200, height: 630, alt: 'PrepZero AI Free Pricing' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PrepZero AI Pricing — 100% Free BYOK Architecture',
+    description: 'Zero subscriptions. Bring your own free Gemini API key for unlimited interview prep.',
+    images: ['/zeroprep-preview.jpg'],
+  },
 };
 
 export default function PricingPage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.prepzero.in',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Pricing',
+        item: 'https://www.prepzero.in/pricing',
+      },
+    ],
+  };
+
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'Why is ZeroPrep AI free to use?',
+        name: 'Why is PrepZero AI free to use?',
         acceptedAnswer: {
           '@type': 'Answer',
           text: 'We believe job seekers should never be exploited with high-margin $30-$50/month recurring fees. By using Google AI Studio free tier Gemini API keys, you get unlimited interview prep at zero AI cost.',
@@ -40,7 +77,7 @@ export default function PricingPage() {
       },
       {
         '@type': 'Question',
-        name: 'Is my Google API key safe in ZeroPrep AI?',
+        name: 'Is my Google API key safe in PrepZero AI?',
         acceptedAnswer: {
           '@type': 'Answer',
           text: 'Yes. Your API key is encrypted and stored strictly in your local device storage. It is never transmitted to our servers or shared with any third party.',
@@ -51,7 +88,11 @@ export default function PricingPage() {
 
   return (
     <div className="py-16 sm:py-24">
-      {/* FAQ Schema */}
+      {/* Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
@@ -59,63 +100,64 @@ export default function PricingPage() {
 
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto">
           <span className="text-xs font-bold uppercase tracking-widest text-blue-600">
-            Transparent BYOK Architecture
+            Fair & Transparent BYOK Pricing
           </span>
           <h1 className="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
-            No Subscription Traps. Ever.
+            Pass interviews without predatory subscriptions.
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600">
-            Most interview tools charge $40 to $120 every single month for a simple ChatGPT wrapper.
-            ZeroPrep AI empowers you with a direct Bring-Your-Own-Key (BYOK) model.
+            Traditional AI interview apps charge $30-$100/month by marking up standard AI APIs.
+            PrepZero AI is architected differently: Bring Your Own Key (BYOK) and pay $0 forever.
           </p>
         </div>
 
         {/* Pricing Card */}
-        <div className="mt-16 max-w-lg mx-auto rounded-3xl border-2 border-blue-600 bg-white p-8 sm:p-10 shadow-2xl relative">
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-4 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-md">
-            Forever Free AI Tier (BYOK)
+        <div className="mt-14 mx-auto max-w-lg rounded-3xl border-2 border-blue-600 bg-white p-8 sm:p-10 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 bg-blue-600 text-white text-[11px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-wider">
+            Most Popular
           </div>
 
-          <div className="text-center pt-2">
-            <span className="text-5xl font-extrabold text-slate-900 tracking-tight">$0</span>
-            <span className="text-sm font-medium text-slate-500 ml-1">/ month</span>
-            <p className="text-xs text-slate-500 mt-2">
-              Powered by your personal free Google Gemini API Key
-            </p>
+          <div className="flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+            <ShieldCheck className="h-4 w-4" />
+            <span>Community BYOK Edition</span>
           </div>
 
-          <div className="mt-8 border-t border-slate-100 pt-6">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 mb-4">
-              Everything Included:
-            </h2>
-            <ul className="space-y-3 text-sm text-slate-700">
-              <li className="flex items-center gap-2.5">
-                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Dual-channel CoreAudio & WASAPI system audio loopback</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Undetectable screen overlay (OS window exclusion)</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Google Gemini 2.5 Flash sub-second reasoning</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Live screen OCR context extraction</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Unlimited mock interview sessions</span>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Check className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>No recurring bills or surprise card charges</span>
-              </li>
-            </ul>
+          <div className="mt-4 flex items-baseline gap-2">
+            <span className="text-5xl font-extrabold text-slate-900">$0</span>
+            <span className="text-sm font-semibold text-slate-500">/ forever</span>
+          </div>
+
+          <p className="mt-3 text-sm text-slate-600">
+            Full desktop app access with native audio loopback, stealth HUD, and Google Gemini 2.5 Flash.
+          </p>
+
+          <div className="mt-8 space-y-3.5 text-sm text-slate-700">
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>Full Stealth HUD on Zoom, Google Meet & Teams</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>Internal Audio Loopback (Interviewer speech)</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>One-Click Screen OCR for LeetCode & HackerRank</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>Direct Google Gemini 2.5 Flash connectivity</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>Client-side privacy: Zero cloud logs retained</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 text-emerald-600 shrink-0" />
+              <span>No credit card required to install or use</span>
+            </div>
           </div>
 
           <div className="mt-8">
@@ -166,7 +208,7 @@ export default function PricingPage() {
             <div className="rounded-xl border border-slate-200 bg-white p-6">
               <h4 className="font-bold text-sm text-slate-900">Will I ever be billed unexpectedly?</h4>
               <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Never. ZeroPrep AI does not collect your credit card upon signup. You use your own free Google AI key, so we have no billing pipeline to charge you monthly.
+                Never. PrepZero AI does not collect your credit card upon signup. You use your own free Google AI key, so we have no billing pipeline to charge you monthly.
               </p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-white p-6">

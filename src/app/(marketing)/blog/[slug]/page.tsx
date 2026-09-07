@@ -17,11 +17,39 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
-  if (!post) return { title: 'Not Found' };
+  if (!post) return { title: 'Article Not Found | PrepZero AI' };
+
+  const canonicalUrl = `https://www.prepzero.in/blog/${post.slug}`;
 
   return {
-    title: `${post.title} | ZeroPrep AI`,
+    title: `${post.title} | PrepZero AI`,
     description: post.description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${post.title} | PrepZero AI`,
+      description: post.description,
+      url: canonicalUrl,
+      type: 'article',
+      publishedTime: '2026-09-01T00:00:00.000Z',
+      authors: ['PrepZero AI Team'],
+      siteName: 'PrepZero AI',
+      images: [
+        {
+          url: '/zeroprep-preview.jpg',
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${post.title} | PrepZero AI`,
+      description: post.description,
+      images: ['/zeroprep-preview.jpg'],
+    },
   };
 }
 
@@ -41,19 +69,19 @@ export default async function BlogPostPage({ params }: Props) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://zeroprep-ai.vercel.app',
+        item: 'https://www.prepzero.in',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Blog',
-        item: 'https://zeroprep-ai.vercel.app/blog',
+        item: 'https://www.prepzero.in/blog',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: post.title,
-        item: `https://zeroprep-ai.vercel.app/blog/${post.slug}`,
+        item: `https://www.prepzero.in/blog/${post.slug}`,
       },
     ],
   };
@@ -65,9 +93,24 @@ export default async function BlogPostPage({ params }: Props) {
     description: post.description,
     author: {
       '@type': 'Organization',
-      name: 'ZeroPrep AI',
+      name: 'PrepZero AI Team',
+      url: 'https://www.prepzero.in',
     },
-    datePublished: '2026-09-01',
+    publisher: {
+      '@type': 'Organization',
+      name: 'PrepZero AI',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.prepzero.in/favicon.svg',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://www.prepzero.in/blog/${post.slug}`,
+    },
+    datePublished: '2026-09-01T00:00:00.000Z',
+    dateModified: new Date().toISOString(),
+    image: 'https://www.prepzero.in/zeroprep-preview.jpg',
   };
 
   return (

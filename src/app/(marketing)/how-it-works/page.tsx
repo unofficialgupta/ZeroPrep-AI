@@ -1,4 +1,4 @@
-import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   Download,
@@ -13,15 +13,55 @@ import {
   Command
 } from 'lucide-react';
 
-export const metadata = {
-  title: 'How It Works | ZeroPrep AI Setup in 3 Minutes',
+export const metadata: Metadata = {
+  title: 'How It Works | PrepZero AI 3-Minute Stealth Setup',
   description:
-    'Learn how ZeroPrep AI works: install the desktop app, connect your free Gemini API key, and launch the invisible HUD over Zoom or Google Meet.',
+    'Learn how PrepZero AI works: install the desktop app, connect your free Gemini API key, and launch the invisible HUD over Zoom, Google Meet, or Teams.',
+  alternates: {
+    canonical: 'https://www.prepzero.in/how-it-works',
+  },
+  openGraph: {
+    title: 'How PrepZero AI Works — Setup in 3 Minutes',
+    description:
+      'Step-by-step walkthrough: installation, connecting free Gemini 2.5 Flash API key, and invisible HUD operation.',
+    url: 'https://www.prepzero.in/how-it-works',
+    siteName: 'PrepZero AI',
+    images: [{ url: '/zeroprep-preview.jpg', width: 1200, height: 630, alt: 'How PrepZero AI Works' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'How PrepZero AI Works — 3-Minute Setup',
+    description: 'Learn how to set up invisible HUD over Zoom & Google Meet.',
+    images: ['/zeroprep-preview.jpg'],
+  },
 };
 
 export default function HowItWorksPage() {
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.prepzero.in',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'How It Works',
+        item: 'https://www.prepzero.in/how-it-works',
+      },
+    ],
+  };
+
   return (
     <div className="py-16 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto">

@@ -45,6 +45,7 @@ interface StealthOverlayProps {
   isOpen: boolean;
   onClose: () => void;
   isNativeWindow?: boolean;
+  initialIndex?: number;
 }
 
 interface AnswerEntry {
@@ -148,6 +149,7 @@ export default function StealthOverlay({
   isOpen,
   onClose,
   isNativeWindow = false,
+  initialIndex = 0,
 }: StealthOverlayProps) {
   const { apiKey, activeModel } = useGeminiKey();
 
@@ -235,7 +237,7 @@ export default function StealthOverlay({
 
   // Answer Navigation History
   const [answersList, setAnswersList] = useState<AnswerEntry[]>(DEFAULT_ANSWERS);
-  const [activeAnswerIndex, setActiveAnswerIndex] = useState(0);
+  const [activeAnswerIndex, setActiveAnswerIndex] = useState(initialIndex ?? 0);
 
   const currentAnswer = answersList[activeAnswerIndex] || answersList[0];
 
@@ -1098,7 +1100,7 @@ export default function StealthOverlay({
               )}
 
               {/* Scrollable Answer Content Area */}
-              <div className="space-y-2.5 max-h-[340px] overflow-y-auto pr-1 no-scrollbar text-xs">
+              <div className="space-y-2.5 max-h-[540px] overflow-y-auto pr-1 no-scrollbar text-xs">
                 {/* 💬 Question */}
                 <div className="flex items-start justify-between gap-1.5">
                   <div className="leading-snug">

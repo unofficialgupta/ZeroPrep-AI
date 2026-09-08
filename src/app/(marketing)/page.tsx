@@ -22,6 +22,7 @@ import {
 import HeroDownloadCta from '@/components/marketing/HeroDownloadCta';
 import FaqAccordion from '@/components/marketing/FaqAccordion';
 import PrepZeroLogo from '@/components/PrepZeroLogo';
+import InteractiveMediaShowcase from '@/components/marketing/InteractiveMediaShowcase';
 
 export const metadata: Metadata = {
   title: 'PrepZero AI — Stealth Real-Time Interview & DSA Coding Copilot',
@@ -134,48 +135,8 @@ export default function MarketingHomePage() {
             </div>
           </div>
 
-          {/* ─────────────────── PREVIEW SHOWCASE ─────────────────── */}
-          <div className="mt-14 relative mx-auto max-w-5xl rounded-2xl p-2 bg-gradient-to-b from-slate-200/80 to-slate-100/50 shadow-2xl border border-slate-200">
-            <div className="relative overflow-hidden rounded-xl bg-slate-900 border border-slate-800 shadow-inner">
-              {/* Window Bar Mockup */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-800 bg-slate-950/80">
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-red-500/80" />
-                  <span className="h-3 w-3 rounded-full bg-amber-500/80" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-500/80" />
-                  <span className="ml-2 text-xs font-mono text-slate-400">
-                    PrepZero AI Stealth HUD — Live Audio & Screen Session
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-800/50">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  STEALTH ACTIVE (Window Excluded)
-                </div>
-              </div>
-
-              {/* High Quality App Image */}
-              <div className="relative aspect-video w-full bg-slate-950">
-                <Image
-                  src="/zeroprep-preview.jpg"
-                  alt="PrepZero AI Stealth HUD Interface Preview"
-                  width={1280}
-                  height={720}
-                  priority
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            {/* Feature Callout Floating Pills */}
-            <div className="absolute -bottom-5 left-8 hidden lg:flex items-center gap-2 rounded-xl bg-white/95 px-4 py-2.5 shadow-lg border border-slate-200 text-xs font-semibold text-slate-800 backdrop-blur-md">
-              <Volume2 className="h-4 w-4 text-blue-600" />
-              <span>Dual-Channel Audio Loopback: Active</span>
-            </div>
-            <div className="absolute -bottom-5 right-8 hidden lg:flex items-center gap-2 rounded-xl bg-white/95 px-4 py-2.5 shadow-lg border border-slate-200 text-xs font-semibold text-slate-800 backdrop-blur-md">
-              <Sparkles className="h-4 w-4 text-indigo-600" />
-              <span>Powered by Google Gemini 2.5 Flash</span>
-            </div>
-          </div>
+          {/* ─────────────────── REAL TOOL & VIDEO SHOWCASE ─────────────────── */}
+          <InteractiveMediaShowcase />
         </div>
       </section>
 

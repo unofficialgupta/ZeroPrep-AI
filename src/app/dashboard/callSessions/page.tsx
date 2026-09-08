@@ -29,7 +29,16 @@ export default function CallSessionsPage() {
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
 
   useEffect(() => {
-    setSessions(getStoredSessions());
+    const loaded = getStoredSessions();
+    setSessions(loaded);
+
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('drawer') === 'true' && loaded.length > 0) {
+        setSelectedSession(loaded[0]);
+        setIsDrawerOpen(true);
+      }
+    }
 
     const handleCreated = () => {
       setSessions(getStoredSessions());

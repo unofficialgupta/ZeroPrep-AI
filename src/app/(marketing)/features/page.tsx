@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Volume2,
   EyeOff,
@@ -146,33 +147,24 @@ export default function FeaturesPage() {
 
         {/* Feature 2: Screen Invisibility */}
         <div className="mt-28 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="order-2 lg:order-1 rounded-2xl border border-slate-200 bg-slate-950 p-6 text-white shadow-xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 text-xs font-mono text-slate-400">
-              <span>OS WINDOW COMPOSITOR</span>
-              <span className="text-emerald-400">WINDOW_EXCLUDED</span>
+          <div className="order-2 lg:order-1 relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl">
+            <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-[11px] font-mono text-slate-400">
+              <div className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
+                <span className="ml-2">Live Interview: Stealth HUD Excluded</span>
+              </div>
+              <span className="text-emerald-400">0% Screen Capture Leak</span>
             </div>
-            <div className="mt-6 space-y-4">
-              <div className="p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/30 text-emerald-300 text-xs">
-                <strong>Protected Display Affinity:</strong> Electron window flagged with OS-level content protection. Hardware display buffers automatically mask window pixels from third-party screen grab APIs.
-              </div>
-              <div className="space-y-2 text-xs font-mono text-slate-400">
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span>Zoom Desktop Meeting</span>
-                  <span className="text-emerald-400">HIDDEN</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span>Google Meet (Chrome)</span>
-                  <span className="text-emerald-400">HIDDEN</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span>Microsoft Teams Call</span>
-                  <span className="text-emerald-400">HIDDEN</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span>HackerRank / Codesignal Proctor</span>
-                  <span className="text-emerald-400">HIDDEN</span>
-                </div>
-              </div>
+            <div className="relative aspect-video w-full">
+              <Image
+                src="/screenshots/real-hidden-window.png"
+                alt="Real ZeroPrep AI Stealth HUD window invisible to screen share"
+                fill
+                sizes="(max-width: 1200px) 100vw, 600px"
+                className="object-cover"
+              />
             </div>
           </div>
 
@@ -259,6 +251,57 @@ export default function FeaturesPage() {
 }`}
               </pre>
             </div>
+          </div>
+        </div>
+
+        {/* Feature 4: Call Sessions & Code Replay */}
+        <div className="mt-28 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="order-2 lg:order-2 relative rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl">
+            <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-[11px] font-mono text-slate-400">
+              <div className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
+                <span className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
+                <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
+                <span className="ml-2">Desktop Client: Session Detail Drawer</span>
+              </div>
+              <span className="text-blue-400">Dual-Channel Sync</span>
+            </div>
+            <div className="relative aspect-video w-full">
+              <Image
+                src="/screenshots/real-session-drawer.png"
+                alt="Real ZeroPrep AI Session Replay with Audio Scrubber and Gemini Code Analysis"
+                fill
+                sizes="(max-width: 1200px) 100vw, 600px"
+                className="object-cover"
+              />
+            </div>
+          </div>
+
+          <div className="order-1 lg:order-1 space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-lg bg-blue-100/70 text-blue-800 px-3 py-1 text-xs font-semibold">
+              <Code2 className="h-4 w-4" />
+              <span>Full Interview Memory</span>
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+              Automated Session History & Code Replay
+            </h2>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              Every technical interview call is automatically cataloged in your local desktop database. Review exactly what the interviewer asked, your audio responses, the Gemini real-time code patches, and logical complexity analysis.
+            </p>
+            <ul className="space-y-2 text-sm text-slate-700 font-medium pt-2">
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                <span>Synchronized dual-channel audio timeline playback</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                <span>Timestamped transcript separated by Interviewer vs Candidate</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                <span>1-click exportable compilable solutions and bug explanations</span>
+              </li>
+            </ul>
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Download,
   Key,
@@ -183,6 +184,22 @@ export default function HowItWorksPage() {
                     <span>Hit <code className="font-mono text-[11px] bg-slate-100 px-1 py-0.5 rounded">Cmd+Esc</code> for instant panic dismissal anytime.</span>
                   </li>
                 </ul>
+
+                {/* Real Screenshot Preview */}
+                <div className="pt-4">
+                  <div className="relative aspect-video w-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 shadow-xl">
+                    <Image
+                      src="/screenshots/real-hidden-window.png"
+                      alt="Real PrepZero AI Stealth Overlay in action over coding interview"
+                      fill
+                      sizes="(max-width: 1200px) 100vw, 800px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <p className="mt-2 text-[11px] text-slate-500 font-mono text-center">
+                    Actual unretouched screenshot: Floating Stealth HUD answering LeetCode 14 during an active interview screen share.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

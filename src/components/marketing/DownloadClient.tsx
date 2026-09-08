@@ -15,6 +15,17 @@ import {
   Check,
 } from 'lucide-react';
 
+// ─── GitHub Releases Download URLs ────────────────────────────────────────────
+const GITHUB_RELEASE_BASE =
+  'https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download';
+
+const DOWNLOAD_URLS = {
+  macArm: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.dmg`,
+  macIntel: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.dmg`,
+  windows: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-Setup-1.0.0.exe`,
+  linux: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.AppImage`,
+} as const;
+
 export default function DownloadClient() {
   const [detectedOS, setDetectedOS] = useState<'mac-arm' | 'mac-intel' | 'windows' | 'linux'>('mac-arm');
   const [copiedCmd, setCopiedCmd] = useState(false);
@@ -101,8 +112,8 @@ export default function DownloadClient() {
 
             <div className="mt-8 pt-6 border-t border-slate-100">
               <a
-                href="/downloads/ZeroPrep-AI-1.0.0.dmg"
-                download="ZeroPrep-AI-1.0.0.dmg"
+                href={DOWNLOAD_URLS.macArm}
+                rel="noopener noreferrer"
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-800 transition-all cursor-pointer"
               >
                 <Download className="h-4 w-4" />
@@ -110,8 +121,8 @@ export default function DownloadClient() {
               </a>
               <div className="mt-2.5 text-center">
                 <a
-                  href="/downloads/ZeroPrep-AI-1.0.0.dmg"
-                  download="ZeroPrep-AI-1.0.0.dmg"
+                  href={DOWNLOAD_URLS.macIntel}
+                  rel="noopener noreferrer"
                   className="text-[11px] text-slate-500 hover:text-blue-600 transition-colors underline"
                 >
                   Or download for Intel Macs (.dmg)
@@ -163,8 +174,8 @@ export default function DownloadClient() {
 
             <div className="mt-8 pt-6 border-t border-slate-100">
               <a
-                href="/downloads/ZeroPrep-AI-Setup-1.0.0.exe"
-                download="ZeroPrep-AI-Setup-1.0.0.exe"
+                href={DOWNLOAD_URLS.windows}
+                rel="noopener noreferrer"
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white shadow-md shadow-blue-500/25 hover:bg-blue-700 transition-all cursor-pointer"
               >
                 <Download className="h-4 w-4" />
@@ -219,8 +230,8 @@ export default function DownloadClient() {
 
             <div className="mt-8 pt-6 border-t border-slate-100">
               <a
-                href="/downloads/ZeroPrep-AI-1.0.0.AppImage"
-                download="ZeroPrep-AI-1.0.0.AppImage"
+                href={DOWNLOAD_URLS.linux}
+                rel="noopener noreferrer"
                 className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-800 px-5 py-3.5 text-sm font-bold text-white shadow-md hover:bg-slate-700 transition-all cursor-pointer"
               >
                 <Download className="h-4 w-4" />

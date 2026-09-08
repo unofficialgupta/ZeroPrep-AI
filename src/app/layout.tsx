@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.prepzero.in'),
   title: {
-    default: 'PrepZero AI — Stealth Real-Time Interview & DSA Coding Copilot',
+    default: 'PrepZero AI (Prep Zero) — Stealth Real-Time Interview & DSA Coding Copilot',
     template: '%s | PrepZero AI',
   },
   description:
@@ -40,9 +40,18 @@ export const metadata: Metadata = {
   creator: 'PrepZero AI',
   publisher: 'PrepZero AI',
   category: 'Technology',
+  // ─── Google Search Console Verification ────────────────────────────────────────────
+  // After verifying prepzero.in in Google Search Console, paste the token here:
+  // https://search.google.com/search-console → Add Property → HTML Tag method
+  // e.g. verification: { google: 'abc123xyz' }
+  verification: {
+    google: '', // TODO: paste your GSC verification token here
+  },
   keywords: [
     'PrepZero',
     'PrepZero AI',
+    'Prep Zero',
+    'Prep Zero AI',
     'ZeroPrep AI',
     'prepzero.in',
     'AI interview copilot',

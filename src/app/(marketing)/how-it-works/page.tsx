@@ -98,16 +98,16 @@ export default function HowItWorksPage() {
                 </p>
                 <div className="pt-2 flex flex-wrap gap-4">
                   <a
-                    href="/downloads/ZeroPrep-AI-1.0.0.dmg"
-                    download="ZeroPrep-AI-1.0.0.dmg"
+                    href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-1.0.0.dmg"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-slate-800 transition-colors cursor-pointer"
                   >
                     <Download className="h-4 w-4" />
                     <span>Download macOS (.dmg)</span>
                   </a>
                   <a
-                    href="/downloads/ZeroPrep-AI-Setup-1.0.0.exe"
-                    download="ZeroPrep-AI-Setup-1.0.0.exe"
+                    href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-Setup-1.0.0.exe"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition-colors cursor-pointer"
                   >
                     <Download className="h-4 w-4" />

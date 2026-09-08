@@ -98,8 +98,8 @@ export default function MarketingFooter() {
             <ul className="space-y-2.5 text-sm text-slate-600">
               <li>
                 <a
-                  href="/downloads/ZeroPrep-AI-1.0.0.dmg"
-                  download="ZeroPrep-AI-1.0.0.dmg"
+                  href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-1.0.0.dmg"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
@@ -108,8 +108,8 @@ export default function MarketingFooter() {
               </li>
               <li>
                 <a
-                  href="/downloads/ZeroPrep-AI-Setup-1.0.0.exe"
-                  download="ZeroPrep-AI-Setup-1.0.0.exe"
+                  href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-Setup-1.0.0.exe"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
@@ -118,8 +118,8 @@ export default function MarketingFooter() {
               </li>
               <li>
                 <a
-                  href="/downloads/ZeroPrep-AI-1.0.0.AppImage"
-                  download="ZeroPrep-AI-1.0.0.AppImage"
+                  href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-1.0.0.AppImage"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />

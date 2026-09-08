@@ -74,10 +74,12 @@ linux:
     - name: ZeroPrep Auth
       schemes: [zeroprep]
 
-# ─────────────────── Auto-Updater ───────────────────
-# Uncomment when you set up GitHub Releases:
-# publish:
-#   provider: github
-#   owner: your-github-username
-#   repo: peter-prep
-#   releaseType: release
+# ──────────────────── Auto-Updater & GitHub Releases ────────────────────
+# Run: npm run dist:mac (or dist:win / dist:linux) to build and upload to Releases.
+# Set the GH_TOKEN env var to a GitHub Personal Access Token with 'repo' scope.
+# Example: GH_TOKEN=github_pat_xxx npm run dist:mac
+publish:
+  provider: github
+  owner: unofficialgupta
+  repo: ZeroPrep-AI
+  releaseType: draft

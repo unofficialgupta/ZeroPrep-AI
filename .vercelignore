@@ -3,11 +3,6 @@ dist-electron/
 electron/dist/
 build/
 
-# Electron binaries
-*.dmg
-*.exe
-*.AppImage
-
 # Local env (Vercel env vars are set in the dashboard)
 .env.local
 

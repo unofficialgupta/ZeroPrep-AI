@@ -6,7 +6,7 @@ export default function StructuredData() {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: 'PrepZero AI',
-      alternateName: ['ZeroPrep AI', 'PrepZero'],
+      alternateName: ['Prep Zero', 'Prep Zero AI', 'ZeroPrep AI', 'PrepZero'],
       url: 'https://www.prepzero.in',
       logo: 'https://www.prepzero.in/favicon.svg',
       description:
@@ -25,7 +25,7 @@ export default function StructuredData() {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'PrepZero AI',
-      alternateName: 'PrepZero',
+      alternateName: ['Prep Zero', 'PrepZero', 'Prep Zero AI'],
       url: 'https://www.prepzero.in',
       potentialAction: {
         '@type': 'SearchAction',
@@ -66,6 +66,74 @@ export default function StructuredData() {
       ],
       description:
         'Real-time undetectable AI copilot for technical interviews, DSA algorithms, and system design rounds. Invisible on screen share.',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'PrepZero AI Home',
+          item: 'https://www.prepzero.in',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Download',
+          item: 'https://www.prepzero.in/download',
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Pricing',
+          item: 'https://www.prepzero.in/pricing',
+        },
+        {
+          '@type': 'ListItem',
+          position: 4,
+          name: 'How It Works',
+          item: 'https://www.prepzero.in/how-it-works',
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is Prep Zero AI?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Prep Zero AI (PrepZero AI) is an undetectable real-time AI copilot for technical interviews, DSA coding rounds, and system design assessments. It runs as an invisible floating overlay on Zoom, Google Meet, and Microsoft Teams.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is PrepZero AI detectable on screen share?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. PrepZero AI uses a system-level window flag to exclude itself from screen capture, making it invisible on Zoom, Google Meet, and Microsoft Teams screen shares.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How much does Prep Zero cost?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'PrepZero AI uses a Bring Your Own Key (BYOK) model — you pay nothing to PrepZero. You only pay Google for API usage (Gemini 2.5 Flash), which costs approximately $0.001 per interview session.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What platforms does PrepZero work on?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'PrepZero AI works on macOS (Apple Silicon & Intel), Windows 10/11, and Linux. A web-based version is also available for instant use without installation.',
+          },
+        },
+      ],
     },
   ];
 

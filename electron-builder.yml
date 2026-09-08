@@ -27,7 +27,6 @@ mac:
   target:
     - target: dmg
       arch: [x64, arm64]
-  icon: build/icon.icns
   # Hardened Runtime required for Notarization (set to true when you have Apple Developer ID)
   hardenedRuntime: false
   # Entitlements grant OS permissions (mic, screen capture, audio)
@@ -41,8 +40,6 @@ mac:
 
 dmg:
   title: ZeroPrep AI ${version}
-  icon: build/icon.icns
-  background: build/dmg-background.png
   sign: false
 
 # ─────────────────── Windows ───────────────────
@@ -50,8 +47,6 @@ win:
   target:
     - target: nsis
       arch: [x64]
-  icon: build/icon.ico
-  publisherName: ZeroPrep AI
   protocols:
     - name: ZeroPrep Auth
       schemes: [zeroprep]
@@ -62,14 +57,11 @@ nsis:
   createDesktopShortcut: true
   createStartMenuShortcut: true
   shortcutName: ZeroPrep AI
-  installerIcon: build/icon.ico
-  uninstallerIcon: build/icon.ico
 
 # ─────────────────── Linux ───────────────────
 linux:
   target: AppImage
   category: Utility
-  icon: build/icon.png
   protocols:
     - name: ZeroPrep Auth
       schemes: [zeroprep]

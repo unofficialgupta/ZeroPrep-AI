@@ -2,6 +2,8 @@
   "name": "zeroprep-ai",
   "version": "1.0.0",
   "private": true,
+  "description": "ZeroPrep AI — Stealth Real-Time Interview & DSA Coding Copilot",
+  "author": "ZeroPrep AI",
   "main": "electron/dist/main.js",
   "scripts": {
     "dev": "next dev -p 3001",

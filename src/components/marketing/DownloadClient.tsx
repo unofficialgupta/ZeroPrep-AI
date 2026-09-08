@@ -18,11 +18,12 @@ import {
 import { DOWNLOAD_LINKS } from '@/config/downloads';
 
 const DOWNLOAD_URLS = {
-  macArm: DOWNLOAD_LINKS.mac,
-  macIntel: DOWNLOAD_LINKS.mac,
+  macArm: DOWNLOAD_LINKS.macArm,
+  macIntel: DOWNLOAD_LINKS.macIntel,
   windows: DOWNLOAD_LINKS.windows,
   linux: DOWNLOAD_LINKS.linux,
 } as const;
+
 
 export default function DownloadClient() {
   const [detectedOS, setDetectedOS] = useState<'mac-arm' | 'mac-intel' | 'windows' | 'linux'>('mac-arm');

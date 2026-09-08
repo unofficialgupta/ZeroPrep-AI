@@ -15,15 +15,13 @@ import {
   Check,
 } from 'lucide-react';
 
-// ─── GitHub Releases Download URLs ────────────────────────────────────────────
-const GITHUB_RELEASE_BASE =
-  'https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download';
+import { DOWNLOAD_LINKS } from '@/config/downloads';
 
 const DOWNLOAD_URLS = {
-  macArm: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.dmg`,
-  macIntel: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.dmg`,
-  windows: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-Setup-1.0.0.exe`,
-  linux: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.AppImage`,
+  macArm: DOWNLOAD_LINKS.mac,
+  macIntel: DOWNLOAD_LINKS.mac,
+  windows: DOWNLOAD_LINKS.windows,
+  linux: DOWNLOAD_LINKS.linux,
 } as const;
 
 export default function DownloadClient() {

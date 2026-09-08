@@ -13,6 +13,7 @@ import {
   Sparkles,
   Command
 } from 'lucide-react';
+import { DOWNLOAD_LINKS } from '@/config/downloads';
 
 export const metadata: Metadata = {
   title: 'How It Works | PrepZero AI 3-Minute Stealth Setup',
@@ -99,7 +100,7 @@ export default function HowItWorksPage() {
                 </p>
                 <div className="pt-2 flex flex-wrap gap-4">
                   <a
-                    href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-1.0.0.dmg"
+                    href={DOWNLOAD_LINKS.mac}
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white hover:bg-slate-800 transition-colors cursor-pointer"
                   >
@@ -107,7 +108,7 @@ export default function HowItWorksPage() {
                     <span>Download macOS (.dmg)</span>
                   </a>
                   <a
-                    href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-Setup-1.0.0.exe"
+                    href={DOWNLOAD_LINKS.windows}
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition-colors cursor-pointer"
                   >

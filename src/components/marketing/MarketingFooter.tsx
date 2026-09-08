@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Download, Cpu, ExternalLink } from 'lucide-react';
 import PrepZeroLogo from '@/components/PrepZeroLogo';
+import { DOWNLOAD_LINKS } from '@/config/downloads';
 
 export default function MarketingFooter() {
   return (
@@ -98,7 +99,7 @@ export default function MarketingFooter() {
             <ul className="space-y-2.5 text-sm text-slate-600">
               <li>
                 <a
-                  href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-1.0.0.dmg"
+                  href={DOWNLOAD_LINKS.mac}
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
                 >
@@ -108,7 +109,7 @@ export default function MarketingFooter() {
               </li>
               <li>
                 <a
-                  href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-Setup-1.0.0.exe"
+                  href={DOWNLOAD_LINKS.windows}
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
                 >
@@ -118,7 +119,7 @@ export default function MarketingFooter() {
               </li>
               <li>
                 <a
-                  href="https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download/ZeroPrep-AI-1.0.0.AppImage"
+                  href={DOWNLOAD_LINKS.linux}
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-blue-600 transition-colors"
                 >

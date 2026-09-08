@@ -4,17 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Download, Laptop, ArrowRight } from 'lucide-react';
 
-// ─── GitHub Releases Download URLs ────────────────────────────────────────────
-// After building locally (npm run dist:mac / dist:win / dist:linux), upload
-// artifacts to: https://github.com/unofficialgupta/ZeroPrep-AI/releases/tag/v1.0.0
-const GITHUB_RELEASE_BASE =
-  'https://github.com/unofficialgupta/ZeroPrep-AI/releases/latest/download';
-
-const DOWNLOAD_URLS = {
-  mac: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.dmg`,
-  windows: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-Setup-1.0.0.exe`,
-  linux: `${GITHUB_RELEASE_BASE}/ZeroPrep-AI-1.0.0.AppImage`,
-} as const;
+import { DOWNLOAD_LINKS } from '@/config/downloads';
 
 interface HeroDownloadCtaProps {
   variant?: 'hero' | 'banner';
@@ -36,7 +26,7 @@ export default function HeroDownloadCta({ variant = 'hero' }: HeroDownloadCtaPro
     }
   }, []);
 
-  const getDownloadHref = (os: 'mac' | 'windows' | 'linux') => DOWNLOAD_URLS[os];
+  const getDownloadHref = (os: 'mac' | 'windows' | 'linux') => DOWNLOAD_LINKS[os];
 
   const getOSLabel = (os: 'mac' | 'windows' | 'linux') => {
     switch (os) {
@@ -100,7 +90,7 @@ export default function HeroDownloadCta({ variant = 'hero' }: HeroDownloadCtaPro
       <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500 font-medium">
         <span>Also available for:</span>
         <a
-          href={DOWNLOAD_URLS.mac}
+          href={DOWNLOAD_LINKS.mac}
           rel="noopener noreferrer"
           className="hover:text-blue-600 transition-colors underline underline-offset-2"
         >
@@ -108,7 +98,7 @@ export default function HeroDownloadCta({ variant = 'hero' }: HeroDownloadCtaPro
         </a>
         <span>•</span>
         <a
-          href={DOWNLOAD_URLS.windows}
+          href={DOWNLOAD_LINKS.windows}
           rel="noopener noreferrer"
           className="hover:text-blue-600 transition-colors underline underline-offset-2"
         >
@@ -116,7 +106,7 @@ export default function HeroDownloadCta({ variant = 'hero' }: HeroDownloadCtaPro
         </a>
         <span>•</span>
         <a
-          href={DOWNLOAD_URLS.linux}
+          href={DOWNLOAD_LINKS.linux}
           rel="noopener noreferrer"
           className="hover:text-blue-600 transition-colors underline underline-offset-2"
         >

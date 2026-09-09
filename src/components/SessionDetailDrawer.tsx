@@ -302,7 +302,7 @@ export default function SessionDetailDrawer({
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute bottom-2 left-2 rounded-md bg-white/90 border border-slate-200 px-2 py-1 text-[10px] text-slate-700 font-medium backdrop-blur-xs">
-                    Captured via desktopCapturer hotkey [⌘+⇧+S]
+                    Captured via desktopCapturer hotkey [{typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || navigator.userAgent) ? '⌘+⇧+S' : 'Ctrl+Shift+S'}]
                   </div>
                 </div>
               </div>

@@ -130,12 +130,14 @@ function OverlayContent() {
   }
 
   return (
-    <div className="overlay-transparent-root h-screen w-screen bg-transparent select-none overflow-hidden p-2 flex items-end justify-end">
+    <div className="overlay-transparent-root w-full h-full bg-transparent select-none overflow-hidden flex flex-col items-stretch justify-start">
       <StealthOverlay
         isOpen={true}
         onClose={() => {
           const desktop = (window as any).zeroPrepDesktop || (window as any).parakeetDesktop;
-          if (desktop?.toggleNativeHud) {
+          if (desktop?.closeNativeHud) {
+            desktop.closeNativeHud();
+          } else if (desktop?.toggleNativeHud) {
             desktop.toggleNativeHud();
           }
         }}

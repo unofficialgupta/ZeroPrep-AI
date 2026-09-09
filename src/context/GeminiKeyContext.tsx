@@ -21,7 +21,7 @@ export function GeminiKeyProvider({ children }: { children: React.ReactNode }) {
   const [isKeyConfigured, setIsKeyConfigured] = useState<boolean>(false);
   const [isValidating, setIsValidating] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [activeModel, setActiveModel] = useState<string>('gemini-2.5-flash');
+  const [activeModel, setActiveModel] = useState<string>('gemini-3.6-flash');
 
   useEffect(() => {
     // Check localStorage first, then env variables

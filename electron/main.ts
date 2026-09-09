@@ -1,20 +1,34 @@
 import { app, BrowserWindow, globalShortcut, ipcMain, desktopCapturer, screen, protocol, shell } from 'electron';
 import path from 'path';
 import { createServer } from 'http';
-import { parse } from 'url';
 import crypto from 'crypto';
 import os from 'os';
 
+// ─── Single-Instance Enforcement ─────────────────────────────────────────────
+// Must be evaluated BEFORE app.whenReady() to prevent multiple server / window spawns
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+}
+
 // ─── Dev vs. Production Detection ───────────────────────────────────────────
-// electron-is-dev checks NODE_ENV and whether app is packaged
 const isDev: boolean = !app.isPackaged;
 
 // ─── Base URL: dev = local Next.js, prod = embedded standalone server ────────
 let NEXT_PORT = 3001;
 let BASE_URL = `http://localhost:${NEXT_PORT}`;
 
+// Allow overriding start URL from environment
+if (process.env.ELECTRON_START_URL) {
+  try {
+    const parsed = new URL(process.env.ELECTRON_START_URL);
+    BASE_URL = `${parsed.protocol}//${parsed.host}`;
+  } catch {}
+}
+
 let mainWindow: BrowserWindow | null = null;
 let stealthHUDWindow: BrowserWindow | null = null;
+let persistedStealthProtection: boolean = true;
 
 // ─── Embedded Next.js Standalone Server (Production only) ───────────────────
 async function startNextServer(): Promise<void> {
@@ -66,6 +80,23 @@ function findFreePort(preferred: number): Promise<number> {
   });
 }
 
+// ─── Resilient URL Loader (handles dev server startup lag) ──────────────────
+async function loadURLWithRetry(win: BrowserWindow, url: string, maxRetries = 8): Promise<void> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      await win.loadURL(url);
+      return;
+    } catch (err) {
+      if (attempt === maxRetries) {
+        console.error(`[ZeroPrep] Failed to load ${url} after ${maxRetries} attempts:`, err);
+        return;
+      }
+      // Wait before retrying (exponential-ish backoff: 500ms, 1000ms...)
+      await new Promise((r) => setTimeout(r, Math.min(600 * attempt, 2500)));
+    }
+  }
+}
+
 // ─── Deep-Link Protocol (zeroprep://) for Google OAuth ──────────────────────
 function registerDeepLinkProtocol(): void {
   // macOS: set as default handler for zeroprep:// scheme
@@ -76,7 +107,6 @@ function registerDeepLinkProtocol(): void {
 }
 
 function handleDeepLink(url: string): void {
-  // url = "zeroprep://auth/callback?code=...&state=..."
   console.log('[ZeroPrep] Deep link received:', url);
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.webContents.send('auth-deep-link', url);
@@ -102,6 +132,12 @@ function getDeviceFingerprint(): string {
 
 // ─── Window Factories ────────────────────────────────────────────────────────
 function createMainWindow(): void {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.show();
+    mainWindow.focus();
+    return;
+  }
+
   mainWindow = new BrowserWindow({
     title: 'ZeroPrep AI - Real-Time Copilot',
     width: 1440,
@@ -114,37 +150,18 @@ function createMainWindow(): void {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      // Required for getDisplayMedia() audio capture in packaged app
       webSecurity: true,
     },
   });
 
   // Native screen capture protection — invisible in Zoom/Meet/Teams screenshares
-  mainWindow.setContentProtection(true);
+  mainWindow.setContentProtection(persistedStealthProtection);
 
-  mainWindow.loadURL(`${BASE_URL}/dashboard/callSessions`);
-
-  // ── Global Hotkeys ──
-  globalShortcut.register('CommandOrControl+Shift+S', () => {
-    mainWindow?.webContents.send('trigger-screen-capture');
-    stealthHUDWindow?.webContents.send('trigger-screen-capture');
-  });
-
-  globalShortcut.register('CommandOrControl+Return', () => {
-    stealthHUDWindow?.webContents.send('trigger-generate-answer');
-  });
-
-  globalShortcut.register('CommandOrControl+/', () => {
-    stealthHUDWindow?.webContents.send('toggle-shortcuts-cheatsheet');
-  });
-
-  globalShortcut.register('CommandOrControl+\\', () => {
-    toggleStealthHUD();
-  });
+  loadURLWithRetry(mainWindow, `${BASE_URL}/dashboard/callSessions`);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
-    if (stealthHUDWindow) {
+    if (stealthHUDWindow && !stealthHUDWindow.isDestroyed()) {
       stealthHUDWindow.close();
       stealthHUDWindow = null;
     }
@@ -157,28 +174,39 @@ function createMainWindow(): void {
   });
 }
 
-function createStealthHUD(): void {
+function createStealthHUD(autoShow: boolean = false): void {
   if (stealthHUDWindow && !stealthHUDWindow.isDestroyed()) {
-    stealthHUDWindow.show();
-    stealthHUDWindow.focus();
+    if (autoShow && !stealthHUDWindow.isVisible()) {
+      if (process.platform === 'darwin') {
+        stealthHUDWindow.showInactive();
+      } else {
+        stealthHUDWindow.show();
+      }
+      mainWindow?.webContents.send('stealth-hud-status', true);
+      stealthHUDWindow.webContents.send('stealth-hud-status', true);
+    }
     return;
   }
 
   const primaryDisplay = screen.getPrimaryDisplay();
-  const { width, height } = primaryDisplay.workAreaSize;
+  const { width } = primaryDisplay.workAreaSize;
 
   stealthHUDWindow = new BrowserWindow({
     title: 'ZeroPrep AI HUD',
-    width: 540,
-    height: 690,
-    x: Math.max(10, width - 560),
-    y: Math.max(10, height - 710),
+    width: 520,
+    height: 580,
+    minWidth: 460,
+    minHeight: 48,
+    x: Math.max(20, width - 540),
+    y: 60, // Comfortable upper-right HUD position
     alwaysOnTop: true,
-    type: process.platform === 'darwin' ? 'panel' : undefined,
     frame: false,
     transparent: true,
-    hasShadow: true,
+    hasShadow: false,
     skipTaskbar: true,
+    resizable: false,
+    focusable: true,
+    show: autoShow,
     backgroundColor: '#00000000',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -187,42 +215,243 @@ function createStealthHUD(): void {
     },
   });
 
-  // Float above VS Code, Zoom, Fullscreen Chrome on macOS
   if (process.platform === 'darwin') {
-    stealthHUDWindow.setAlwaysOnTop(true, 'screen-saver', 1);
+    stealthHUDWindow.setAlwaysOnTop(true, 'floating');
     stealthHUDWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   } else {
     stealthHUDWindow.setAlwaysOnTop(true);
   }
 
-  stealthHUDWindow.setContentProtection(true);
-  stealthHUDWindow.loadURL(`${BASE_URL}/overlay`);
+  stealthHUDWindow.setContentProtection(persistedStealthProtection);
+  loadURLWithRetry(stealthHUDWindow, `${BASE_URL}/overlay`);
 
   stealthHUDWindow.on('closed', () => {
     stealthHUDWindow = null;
     mainWindow?.webContents.send('stealth-hud-status', false);
   });
 
-  mainWindow?.webContents.send('stealth-hud-status', true);
+  if (autoShow) {
+    mainWindow?.webContents.send('stealth-hud-status', true);
+  }
 }
 
 function toggleStealthHUD(): boolean {
   if (!stealthHUDWindow || stealthHUDWindow.isDestroyed()) {
-    createStealthHUD();
+    createStealthHUD(true);
     return true;
   } else if (stealthHUDWindow.isVisible()) {
     stealthHUDWindow.hide();
     mainWindow?.webContents.send('stealth-hud-status', false);
+    stealthHUDWindow.webContents.send('stealth-hud-status', false);
     return false;
   } else {
-    stealthHUDWindow.show();
+    if (process.platform === 'darwin') {
+      stealthHUDWindow.showInactive();
+    } else {
+      stealthHUDWindow.show();
+    }
     mainWindow?.webContents.send('stealth-hud-status', true);
+    stealthHUDWindow.webContents.send('stealth-hud-status', true);
     return true;
   }
 }
 
+// ─── Global Hotkeys System ───────────────────────────────────────────────────
+function registerGlobalShortcuts(): void {
+  globalShortcut.unregisterAll();
+
+  const safeRegister = (accelerator: string, callback: () => void) => {
+    try {
+      const ok = globalShortcut.register(accelerator, callback);
+      if (ok) {
+        console.log(`[ZeroPrep] Registered global hotkey: ${accelerator}`);
+      } else {
+        console.warn(`[ZeroPrep] Could not register global hotkey: ${accelerator}`);
+      }
+    } catch (err) {
+      console.warn(`[ZeroPrep] Error registering global hotkey ${accelerator}:`, err);
+    }
+  };
+
+  // 1. Toggle HUD Show / Hide
+  safeRegister('CommandOrControl+\\', toggleStealthHUD);
+  safeRegister('CommandOrControl+Shift+H', toggleStealthHUD);
+
+  // 2. Instant Screen Capture
+  const triggerCapture = () => {
+    if (!stealthHUDWindow || stealthHUDWindow.isDestroyed()) {
+      createStealthHUD(true);
+      stealthHUDWindow?.webContents.once('did-finish-load', () => {
+        stealthHUDWindow?.webContents.send('trigger-screen-capture');
+      });
+      return;
+    }
+    if (!stealthHUDWindow.isVisible()) {
+      if (process.platform === 'darwin') {
+        stealthHUDWindow.showInactive();
+      } else {
+        stealthHUDWindow.show();
+      }
+      mainWindow?.webContents.send('stealth-hud-status', true);
+      stealthHUDWindow.webContents.send('stealth-hud-status', true);
+    }
+    stealthHUDWindow.webContents.send('trigger-screen-capture');
+    mainWindow?.webContents.send('trigger-screen-capture');
+  };
+  safeRegister('CommandOrControl+Shift+S', triggerCapture);
+  safeRegister('CommandOrControl+Shift+Return', triggerCapture);
+  safeRegister('CommandOrControl+Shift+Enter', triggerCapture);
+
+  // 3. AI Answer Generation
+  const triggerAnswer = () => {
+    if (!stealthHUDWindow || stealthHUDWindow.isDestroyed()) {
+      createStealthHUD(true);
+      stealthHUDWindow?.webContents.once('did-finish-load', () => {
+        stealthHUDWindow?.webContents.send('trigger-generate-answer');
+      });
+      return;
+    }
+    if (!stealthHUDWindow.isVisible()) {
+      if (process.platform === 'darwin') {
+        stealthHUDWindow.showInactive();
+      } else {
+        stealthHUDWindow.show();
+      }
+      mainWindow?.webContents.send('stealth-hud-status', true);
+      stealthHUDWindow.webContents.send('stealth-hud-status', true);
+    }
+    stealthHUDWindow.webContents.send('trigger-generate-answer');
+    mainWindow?.webContents.send('trigger-generate-answer');
+  };
+  safeRegister('CommandOrControl+Return', triggerAnswer);
+  safeRegister('CommandOrControl+Enter', triggerAnswer);
+  safeRegister('CommandOrControl+Alt+Return', triggerAnswer);
+  safeRegister('CommandOrControl+Alt+Enter', triggerAnswer);
+
+  // 4. Quick Chat Prompt
+  const triggerChat = () => {
+    if (!stealthHUDWindow || stealthHUDWindow.isDestroyed()) {
+      createStealthHUD(true);
+      stealthHUDWindow?.webContents.once('did-finish-load', () => {
+        stealthHUDWindow?.focus();
+        stealthHUDWindow?.webContents.send('trigger-chat');
+      });
+      return;
+    }
+    if (!stealthHUDWindow.isVisible()) {
+      if (process.platform === 'darwin') {
+        stealthHUDWindow.show();
+      } else {
+        stealthHUDWindow.show();
+      }
+      mainWindow?.webContents.send('stealth-hud-status', true);
+      stealthHUDWindow.webContents.send('stealth-hud-status', true);
+    }
+    stealthHUDWindow.focus();
+    stealthHUDWindow.webContents.send('trigger-chat');
+  };
+  safeRegister('CommandOrControl+Shift+K', triggerChat);
+  safeRegister('CommandOrControl+K', triggerChat);
+
+  // 5. Shortcuts Cheatsheet
+  const triggerShortcuts = () => {
+    if (!stealthHUDWindow || stealthHUDWindow.isDestroyed()) {
+      createStealthHUD(true);
+      stealthHUDWindow?.webContents.once('did-finish-load', () => {
+        stealthHUDWindow?.webContents.send('toggle-shortcuts-cheatsheet');
+      });
+      return;
+    }
+    if (!stealthHUDWindow.isVisible()) {
+      if (process.platform === 'darwin') {
+        stealthHUDWindow.showInactive();
+      } else {
+        stealthHUDWindow.show();
+      }
+      mainWindow?.webContents.send('stealth-hud-status', true);
+      stealthHUDWindow.webContents.send('stealth-hud-status', true);
+    }
+    stealthHUDWindow.webContents.send('toggle-shortcuts-cheatsheet');
+  };
+  safeRegister('CommandOrControl+/', triggerShortcuts);
+  safeRegister('CommandOrControl+Alt+/', triggerShortcuts);
+
+  // 6. Window Movement Hotkeys (Command/Ctrl + Alt + Arrow Keys)
+  const moveWindow = (dx: number, dy: number) => {
+    if (stealthHUDWindow && !stealthHUDWindow.isDestroyed()) {
+      const [currX, currY] = stealthHUDWindow.getPosition();
+      stealthHUDWindow.setPosition(Math.round(currX + dx), Math.round(currY + dy));
+    }
+  };
+  safeRegister('CommandOrControl+Alt+Up', () => moveWindow(0, -60));
+  safeRegister('CommandOrControl+Alt+Down', () => moveWindow(0, 60));
+  safeRegister('CommandOrControl+Alt+Left', () => moveWindow(-60, 0));
+  safeRegister('CommandOrControl+Alt+Right', () => moveWindow(60, 0));
+
+  // Snap to screen corners (Command/Ctrl + Alt + Number)
+  const snapWindow = (corner: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left') => {
+    if (!stealthHUDWindow || stealthHUDWindow.isDestroyed()) return;
+    const primaryDisplay = screen.getPrimaryDisplay();
+    const { width, height } = primaryDisplay.workAreaSize;
+    const [winW, winH] = stealthHUDWindow.getSize();
+    let x = Math.max(20, width - winW - 20);
+    let y = 60;
+    if (corner === 'top-left') {
+      x = 20;
+      y = 60;
+    } else if (corner === 'bottom-right') {
+      x = Math.max(20, width - winW - 20);
+      y = Math.max(60, height - winH - 20);
+    } else if (corner === 'bottom-left') {
+      x = 20;
+      y = Math.max(60, height - winH - 20);
+    }
+    stealthHUDWindow.setPosition(Math.round(x), Math.round(y));
+  };
+  safeRegister('CommandOrControl+Alt+9', () => snapWindow('top-right'));
+  safeRegister('CommandOrControl+Alt+7', () => snapWindow('top-left'));
+  safeRegister('CommandOrControl+Alt+3', () => snapWindow('bottom-right'));
+  safeRegister('CommandOrControl+Alt+1', () => snapWindow('bottom-left'));
+}
+
 // ─── IPC Handlers ────────────────────────────────────────────────────────────
 ipcMain.handle('toggle-native-hud', () => toggleStealthHUD());
+
+ipcMain.handle('close-native-hud', () => {
+  if (stealthHUDWindow && !stealthHUDWindow.isDestroyed()) {
+    stealthHUDWindow.hide();
+    mainWindow?.webContents.send('stealth-hud-status', false);
+    stealthHUDWindow.webContents.send('stealth-hud-status', false);
+  }
+  return true;
+});
+
+// Dynamic HUD window resizing to match expanded / collapsed state
+ipcMain.handle('resize-hud-window', (_event, width: number, height: number) => {
+  if (stealthHUDWindow && !stealthHUDWindow.isDestroyed()) {
+    stealthHUDWindow.setSize(Math.round(width), Math.round(height));
+  }
+  return true;
+});
+
+// Move HUD window smoothly by delta (mouse drag fallback)
+ipcMain.handle('move-hud-window', (_event, deltaX: number, deltaY: number) => {
+  if (stealthHUDWindow && !stealthHUDWindow.isDestroyed()) {
+    const [currX, currY] = stealthHUDWindow.getPosition();
+    stealthHUDWindow.setPosition(Math.round(currX + deltaX), Math.round(currY + deltaY));
+  }
+  return true;
+});
+
+// Pass-through mouse events when hovering over transparent/empty canvas
+ipcMain.handle('set-hud-ignore-mouse', (_event, ignore: boolean) => {
+  if (stealthHUDWindow && !stealthHUDWindow.isDestroyed()) {
+    try {
+      stealthHUDWindow.setIgnoreMouseEvents(ignore, { forward: true });
+    } catch {}
+  }
+  return true;
+});
 
 ipcMain.handle('get-desktop-sources', async () => {
   const sources = await desktopCapturer.getSources({
@@ -238,6 +467,7 @@ ipcMain.handle('get-desktop-sources', async () => {
 });
 
 ipcMain.handle('set-stealth-protection', (_event, enabled: boolean) => {
+  persistedStealthProtection = enabled;
   mainWindow?.setContentProtection(enabled);
   stealthHUDWindow?.setContentProtection(enabled);
   return true;
@@ -247,25 +477,15 @@ ipcMain.handle('get-device-fingerprint', () => {
   return getDeviceFingerprint();
 });
 
-/**
- * open-external-url
- * Renderer → opens a URL in the system browser.
- * Used for Google OAuth flow (system browser is required — Google blocks webviews).
- */
 ipcMain.handle('open-external-url', (_event, url: string) => {
   shell.openExternal(url);
   return true;
 });
 
-/**
- * get-audio-sources
- * Returns a list of desktop audio sources (screens + app windows) for loopback capture.
- * The renderer uses these IDs as chromeMediaSourceId in getUserMedia constraints.
- */
 ipcMain.handle('get-audio-sources', async () => {
   const sources = await desktopCapturer.getSources({
     types: ['screen', 'window'],
-    thumbnailSize: { width: 0, height: 0 }, // thumbnails not needed, minimise overhead
+    thumbnailSize: { width: 0, height: 0 },
     fetchWindowIcons: false,
   });
   return sources.map((s) => ({
@@ -279,6 +499,8 @@ app.whenReady().then(async () => {
   registerDeepLinkProtocol();
   await startNextServer();
   createMainWindow();
+  createStealthHUD(false); // Pre-warm HUD in memory for instant hotkey response
+  registerGlobalShortcuts();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -287,26 +509,20 @@ app.whenReady().then(async () => {
   });
 });
 
+app.on('second-instance', (_event, argv) => {
+  const deepLink = argv.find((arg) => arg.startsWith('zeroprep://'));
+  if (deepLink) handleDeepLink(deepLink);
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  }
+});
+
 // macOS: handle deep-link from second instance (when app is already running)
 app.on('open-url', (_event, url) => {
   _event.preventDefault();
   handleDeepLink(url);
 });
-
-// Windows/Linux: second instance passes argv; parse zeroprep:// from it
-const gotTheLock = app.requestSingleInstanceLock();
-if (!gotTheLock) {
-  app.quit();
-} else {
-  app.on('second-instance', (_event, argv) => {
-    const deepLink = argv.find((arg) => arg.startsWith('zeroprep://'));
-    if (deepLink) handleDeepLink(deepLink);
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore();
-      mainWindow.focus();
-    }
-  });
-}
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();

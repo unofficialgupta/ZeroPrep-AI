@@ -5,6 +5,15 @@ const desktopApi = {
 
   // ── HUD Window Control ─────────────────────────────────────────────────────
   toggleNativeHud: () => ipcRenderer.invoke('toggle-native-hud'),
+  closeNativeHud: () => ipcRenderer.invoke('close-native-hud'),
+  resizeHudWindow: (width: number, height: number) =>
+    ipcRenderer.invoke('resize-hud-window', width, height),
+  moveHudWindow: (deltaX: number, deltaY: number) =>
+    ipcRenderer.invoke('move-hud-window', deltaX, deltaY),
+
+  // ── Mouse Event Pass-Through (forward transparent background clicks) ──────
+  setIgnoreMouseEvents: (ignore: boolean) =>
+    ipcRenderer.invoke('set-hud-ignore-mouse', ignore),
 
   // ── Screen Capture ─────────────────────────────────────────────────────────
   getDesktopSources: () => ipcRenderer.invoke('get-desktop-sources'),
@@ -37,6 +46,12 @@ const desktopApi = {
     const handler = () => callback();
     ipcRenderer.on('trigger-generate-answer', handler);
     return () => ipcRenderer.removeListener('trigger-generate-answer', handler);
+  },
+
+  onTriggerChat: (callback: () => void) => {
+    const handler = () => callback();
+    ipcRenderer.on('trigger-chat', handler);
+    return () => ipcRenderer.removeListener('trigger-chat', handler);
   },
 
   onToggleShortcuts: (callback: () => void) => {
